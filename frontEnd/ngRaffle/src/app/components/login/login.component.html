@@ -1,0 +1,19 @@
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+<div class="form-group"><label for="phone">Phone</label>
+    <input type="text" 
+    class="form-control" 
+    id="phone" 
+    name="phone" 
+    [(ngModel)]="model.phoneNumber">
+</div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="text" 
+        class="form-control password" 
+        id="password" 
+        name="password" 
+        [(ngModel)]="model.password">
+    </div>
+    <button class="btn btn-primary" >Login</button>
+    <p class=""><label >Or complete your one-step</label><a routerLink="/register"> Registration</a></p>
+</form>

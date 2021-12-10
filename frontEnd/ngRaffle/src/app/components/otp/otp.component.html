@@ -1,0 +1,12 @@
+<form #f="ngForm" (ngSubmit)="onSubmit(f)" >
+    <div class="form-group"><label for="otp">OTP</label>
+        <input type="text" required 
+        class="form-control" 
+        id="otp" 
+        name="otp" 
+        [(ngModel)]="otpData">
+    </div>
+        <button class="btn btn-primary">Validate</button>
+        <a routerLink=""> <button class="btn btn-cancel">Cancel</button></a>
+        
+    </form>
