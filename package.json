@@ -1,0 +1,26 @@
+{
+  "name": "schnitten_raffle",
+  "version": "1.0.0",
+  "description": "Test Raffle promotion code",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon --inspect server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "pneumatictech",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "mongoose": "^6.0.13",
+    "pdf-creator-node": "^2.2.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
