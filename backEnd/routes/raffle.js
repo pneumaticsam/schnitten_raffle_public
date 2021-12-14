@@ -1,57 +1,95 @@
 const { Router, json } = require("express");
 const Joi = require("joi");
 const dbClient = require("../db");
+const {authenticate} = require("../auth");
 const ObjectId = require("mongodb").ObjectId;
 
 const moment = require("moment");
 const fs = require("fs");
 const pdf = require("../pdfgen");
+const { time } = require("console");
 
 const router = Router();
 
-router.get("/check?rCode", async (req, res) => {
-  const rCode = req.query.rCode;
-  if (!rCode) {
-    return res.status(401).send("No Code");
+const dbname= "raffle-db"
+const resp = {isWin:false,desc:""};
+
+router.post("/check", authenticate, async (req, res) => {
+  const rCode = req.body.rCode;
+  if (!rCode || rCode=="") {
+    resp.desc = "No code sent"
+    return res.status(201).send(resp);
   }
+
+  console.log(`checking for... ${rCode}`)
+
+  dbClient.connect(async (err) => {
+    if (err) {
+      console.log(`Could not connect to db ${err}`);
+      resp.desc="DB error"
+      return res.status(500).send(resp)
+    } 
+  });
 
   try {
     //log check
-    collection = dbClient.connect("raffle").collection("rafflechecks");
+    collection = dbClient.db(dbname).collection("rafflechecks");
     collection.insertOne({
-      customer: user.id,
+      customer: req.user.id,
       checkTime: moment().format("YYYY-MM-DD hh:mm:ssss"),
     });
     //count checks
 
     const kount = await collection.count({
-      customer: user.id,
+      customer: req.user.id,
       checkTime: { $gt: moment().day() },
     });
 
+    console.log(`User ${req.user.name} has checked ${kount} time(s) today`)
+
+
+    console.log('velocity limit =', process.env.MAX_DAILY_CHECK)
     //if checks within bounds then
-    if (kount > process.env.MAX_DAILY_CHECK)
+    if (kount > process.env.MAX_DAILY_CHECK){
+      console.log('velocity limit!')
+      resp.desc = 'Too many check for today, try again tomorrow'
       return res
-        .status(401)
-        .send("Too many check for today, try again tomorrow");
+        .status(201)
+        .send(resp);
+    }
 
     //do check
-    collection = dbClient.connect("raffle").collection("rafflecodes");
+    collection = dbClient.db(dbname).collection("rafflecodes");
     const hit = await collection.findOne({
       code: rCode,
-      category: { $ne: "" },
+      category: { $ne: "0" },
     });
+    
+    if(!hit || hit ==0){
+      console.log('No winning code was found ', hit)
+      resp.desc = "Not so lucky this time, try again later"
+      return res
+      .status(201)
+      .send(resp);
+    }
 
+    console.log(`found ${hit} winning code!`)
+
+
+    console.log(` Raffle categories config = ${process.env.RAFFLE_CATEGORIES}`)
     const prizes = JSON.parse(process.env.RAFFLE_CATEGORIES);
 
-    console.log(
-      `Congratulations, you have won yourself a prize \n Details: ${
-        prizes[hit.category]
-      }`
-    );
-  } catch {
+const priceDesc=`Congratulations, you have won! Details: Category[ ${prizes[hit.category]}]`
+    console.log(priceDesc);
+resp.desc=priceDesc
+    return res.status(200).send(resp)
+
+  } catch (err) {
+    console.log(err)
+    resp.desc="Error"
+    return res.status(500).send(resp)
   } finally {
-  }
+  } 
 });
 
 //=======Admin Stuff=================================
@@ -124,7 +162,7 @@ router.post("/gencodes", async (req, res) => {
     if (err) throw err;
     console.log("File is created successfully.");
   });
-  console.log("...all done");
+  console.log("...all done"); 
 });
 
 function makeid(length) {

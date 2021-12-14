@@ -24,11 +24,13 @@ const userProfileSchema = Joi.object({
   zipCode: Joi.string().required().min(4),
 });
 
+const dbname= "raffle-db"
+
 router.get("/", (req, res) => {
   dbClient.connect(async (err) => {
     if (err) return console.log(`Could not connect to db ${err}`);
     try {
-      const collection = dbClient.db("raffle").collection("customers");
+      const collection = dbClient.db(dbname).collection("customers");
       // perform actions on the collection object
       const users = await collection.find().toArray();
       res.send(users);
@@ -56,7 +58,7 @@ router.post("/register", async (req, res) => {
   dbClient.connect(async (err) => {
     if (err) return console.log(`Could not connect to db ${err}`);
     try {
-      const collection = dbClient.db("raffle").collection("registration");
+      const collection = dbClient.db(dbname).collection("registration");
 
       //generate token for verification
 
@@ -93,7 +95,7 @@ router.post("/verify", (req, res) => {
   dbClient.connect(async (err) => {
     if (err) return console.log(`Could not connect to db ${err}`);
     try {
-      const registrations = dbClient.db("raffle").collection("registration");
+      const registrations = dbClient.db(dbname).collection("registration");
       const searchParams = {
         otp: req.body.otp,
         _id: ObjectId(req.body.id),
@@ -104,7 +106,7 @@ router.post("/verify", (req, res) => {
       if (!user) {
         return res.status(401).send("Unauthorised");
       }
-      const collection = dbClient.db("raffle").collection("customers");
+      const collection = dbClient.db(dbname).collection("customers");
       // perform actions on the collection object
       const insertedUser = await collection.insertOne({
         phone: user.phone,
@@ -131,7 +133,7 @@ router.post("/updateprofile", authenticate, (req, res) => {
   dbClient.connect(async (err) => {
     if (err) return console.log(`Could not connect to db ${err}`);
     try {
-      const collection = dbClient.db("raffle").collection("customers");
+      const collection = dbClient.db(dbname).collection("customers");
       // perform actions on the collection object
       //const userid = "61a560c35c11ae6e70e92170";
       const updatedUser = await collection.updateOne(

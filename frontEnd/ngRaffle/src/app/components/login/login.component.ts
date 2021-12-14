@@ -21,7 +21,13 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private alertService: AlertService) { }
+    private alertService: AlertService) {
+
+            // redirect to home if already logged in
+            if (this.authenticationService.currentUserValue) {
+              this.router.navigate(['/']);
+          }
+     }
 
   ngOnInit(): void {
     
@@ -39,6 +45,8 @@ export class LoginComponent implements OnInit {
 
         // stop here if form is invalid
         if (f.invalid) {
+          console.log('form is NOT valid!!!');
+          
             return;
         }
 console.log(f);
@@ -47,11 +55,13 @@ console.log(f);
             .pipe(first())
             .subscribe(
                 data => {
+                  console.log(data)
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    this.alertService.error(error);
-                    this.loading = false; 
+                  console.log(error.error)
+                  this.alertService.error(error.error);
+                  this.loading = false; 
                 });
     }
 }

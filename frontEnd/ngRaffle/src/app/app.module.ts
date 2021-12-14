@@ -18,9 +18,12 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { AlertModule } from './components/alert';
 import { OtpComponent } from './components/otp/otp.component';
+import { CheckerComponent } from './components/checker/checker.component';
+
 
 const appRoutes:Routes =  [
-  {path:'', component:LoginComponent},
+  {path:'', component:CheckerComponent},
+  {path:'login', component:LoginComponent},
   {path:'register', component:RegistrationComponent},
   {path:'verifyOtp', component:OtpComponent},
 ]
@@ -32,7 +35,8 @@ const appRoutes:Routes =  [
     LoginComponent,
     RegistrationComponent,
     OtpComponent,
-  ],
+    CheckerComponent,
+    ],
   imports: [
     BrowserModule,
     HttpClientModule,
