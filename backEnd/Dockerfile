@@ -1,14 +1,6 @@
 
 FROM node:17.2.0-alpine3.14
 
-# ENV CONNECTIONSTRING = mongodb+srv://raffle_admin:passkey01@cluster0.r9fsr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-#     ACCESS_TOKEN_SECRET = 85f3fe0d2f2c8181abd8ec129bbc3b285b44266e1fec1c9c9545febdd14079ed686bc72c26d801d16c7c296150c1675aa86ef3db0a220b037f8c50bd1599d613
-#     REFRESH_TOKEN_SECRET = 5205be0d6b6c734249d00ffe414abc0d274961e3ef412248b235fc21d6c6662cb2b56bd7e77b918872f6b8f6a96c403eb09091cdbdf018897fc90d8a6b5130c5
-#     RAFFLE_CODE_TOTAL = 50000
-#     RAFFLE_CODE_LENGTH = 12
-#     RAFFLE_CATEGORIES = {"A":10,"B":500,"C":1000,"D":20000}
-#     MAX_DAILY_CHECK = 3 
-
 WORKDIR /app
 
 COPY package.json package-lock.json ./
