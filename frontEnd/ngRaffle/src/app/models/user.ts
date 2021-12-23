@@ -7,3 +7,13 @@ export class User {
     lastName!: string;
     token!: string;
 }
+
+export class UserProfile {
+    
+    firstName!: string;
+    lastName!: string;
+    addressLine1!: string;
+    addressLine2!: string;
+    zipCode!: string;
+}
+

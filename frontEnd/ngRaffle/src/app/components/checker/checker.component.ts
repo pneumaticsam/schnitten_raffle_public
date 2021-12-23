@@ -57,14 +57,21 @@ export class CheckerComponent implements OnInit {
                   console.log('SUCCESS')
                   console.log(data)
                   this.alertService.info(data.desc);
-                  // this.returnUrl="/";
-                  // this.router.navigate([this.returnUrl]);
+                  if(!data.checkID || data.checkID==""){
+                    console.log('profile already captured... skipping profile capture');
+                    location.href=location.href
+                    //this.router.navigate([this.returnUrl]);
+
+                  }else{
+                  this.returnUrl="/profile";
+                  this.router.navigate([this.returnUrl], {queryParams:{winingID:data.checkID}});
+                  }
                 },
                 error => {
                   console.log('FAILURE')
 
                   console.log(error.error)
-                    this.alertService.error(error.error||error.desc);
+                    this.alertService.error(error.error.desc);
                     this.loading = false;
                 });
 

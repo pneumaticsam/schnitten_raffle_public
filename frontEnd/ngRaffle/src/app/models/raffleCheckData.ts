@@ -7,6 +7,7 @@ export class RaffleCheckData{
 
 export class RaffleCheckResponse{
     constructor(
+        public checkID:string,
         public isWin:boolean,
         public desc:string
     ){}

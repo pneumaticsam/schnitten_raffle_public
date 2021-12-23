@@ -48,8 +48,8 @@ console.log(f);
                   this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                  console.log(error)
-                    this.alertService.error(error);
+                  console.log(error.error)
+                    this.alertService.error(error.error);
                     this.loading = false;
                 });
 

@@ -1,0 +1,11 @@
+.container{
+        background-image: radial-gradient(rgba(217, 91, 132, 0.5), rgba(
+          145, 146, 122, 0.5));
+        text-align: center;
+        color:red;
+        
+    }
+
+    .content{
+        color: red;
+    }

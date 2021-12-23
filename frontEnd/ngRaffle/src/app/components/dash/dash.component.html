@@ -1,42 +1,21 @@
-<div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols="3" rowHeight="350px">
-    <mat-grid-tile colspan="2" rowspan="1">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            Main
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
 
-    <mat-grid-tile colspan="1" rowspan="1">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            Raffle
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-            </button>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>
-            <alert></alert>
-            <router-outlet></router-outlet>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+<div class="flex-container">
+<div class="flex-col main">
+  <div class="title">AMIT</div>
+  <div class="main-content">
+    <h1 class="huge-text font-effect-fire">Great taste meets great value!</h1>
+  </div>
+<div class="footer"></div>
+</div>
+<div class="flex-col activity-area">  
+  <div class="flex-activity-box-container">
+    <div class="raffle-title">Austrian Manner Schnitten <br> <br> Raffle</div>
+    <div class="flex-alertz-box">
+      <alert></alert>
+       </div>
+  <div class="flex-activity-box">
+  <router-outlet></router-outlet>
+  </div></div>
+</div>
+
 </div>

@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { DashComponent } from './components/dash/dash.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +20,9 @@ import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http'
 import { AlertModule } from './components/alert';
 import { OtpComponent } from './components/otp/otp.component';
 import { CheckerComponent } from './components/checker/checker.component';
+import { MustMatchDirective } from './components/mustMatch/must-match.directive';
+import { ProfileComponent } from './components/profile/profile.component';
+import { PopUpComponent } from './components/pop-up/pop-up.component';
 
 
 const appRoutes:Routes =  [
@@ -26,6 +30,7 @@ const appRoutes:Routes =  [
   {path:'login', component:LoginComponent},
   {path:'register', component:RegistrationComponent},
   {path:'verifyOtp', component:OtpComponent},
+  {path:'profile', component:ProfileComponent},
 ]
 
 @NgModule({
@@ -36,6 +41,9 @@ const appRoutes:Routes =  [
     RegistrationComponent,
     OtpComponent,
     CheckerComponent,
+    MustMatchDirective,
+    ProfileComponent,
+    PopUpComponent
     ],
   imports: [
     BrowserModule,
@@ -44,7 +52,8 @@ const appRoutes:Routes =  [
     BrowserAnimationsModule,
     MatSliderModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule,
     FormsModule,
-    AlertModule
+    AlertModule,
+    MatDialogModule
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent]

@@ -1,18 +1,36 @@
-<form #f="ngForm" (ngSubmit)="onSubmit(f)" >
+<form #f="ngForm" (ngSubmit)="onSubmit(f)" [mustMatch]="['password', 'confirmPassword']">
     <div class="form-group"><label for="phone">Phone</label>
-        <input type="text" 
+        <input type="text" required
         class="form-control" 
         id="phone" 
         name="phone" 
         [(ngModel)]="model.phoneNumber">
     </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required minlength="6" />
+        <div *ngIf="f.submitted && password.invalid" class="invalid-feedback">
+            <div *ngIf="password.errors!.required">Password is required</div>
+            <div *ngIf="password.errors!.minlength">Password must be at least 6 characters</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="model.confirmPassword" #confirmPassword="ngModel" [ngClass]="{ 'is-invalid': f.submitted && confirmPassword.invalid }" required />
+        <div *ngIf="f.submitted && confirmPassword.invalid" class="invalid-feedback">
+            <div *ngIf="confirmPassword.errors!.required">Confirm Password is required</div>
+            <div *ngIf="confirmPassword.errors!.mustMatch">Passwords must match</div>
+        </div>
+    </div>
+    
         <div class="form-group">
-            <label for="password">Password</label>
-            <input type="text" 
-            class="form-control password" 
-            id="password" 
-            name="password" 
-            [(ngModel)]="model.password">
+            <input type="checkbox" required 
+            class="form-control checkbox" 
+            id="privacy" 
+            name="privacy" 
+            [(ngModel)]="model.legalChecked">
+            I have read and do agree with the <a (click)="openDialog()" _target="blank">privacy policy</a>
         </div>
         <button class="btn btn-primary">Register</button>
         <a routerLink=""> <button class="btn btn-cancel">Cancel</button></a>

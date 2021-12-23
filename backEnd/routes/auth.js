@@ -58,7 +58,18 @@ router.post("/register", async (req, res) => {
   dbClient.connect(async (err) => {
     if (err) return console.log(`Could not connect to db ${err}`);
     try {
-      const collection = dbClient.db(dbname).collection("registration");
+
+      //make sure that the user does not already exist
+      var collection = dbClient.db(dbname).collection("customers");
+      const dbUser = await collection.findOne({phone:user.phone});
+
+      if(dbUser){
+        const err= `User ${dbUser.phone} already exists!`
+        console.log(err)
+        return res.status(400).send(err);
+      }
+
+      collection = dbClient.db(dbname).collection("registration");
 
       //generate token for verification
 
@@ -133,13 +144,45 @@ router.post("/updateprofile", authenticate, (req, res) => {
   dbClient.connect(async (err) => {
     if (err) return console.log(`Could not connect to db ${err}`);
     try {
-      const collection = dbClient.db(dbname).collection("customers");
+      collection = dbClient.db(dbname).collection("customers");
       // perform actions on the collection object
       //const userid = "61a560c35c11ae6e70e92170";
       const updatedUser = await collection.updateOne(
-        { _id: ObjectId(user.id) },
-        { $set: { email: req.body.email, phone: req.body.phone } }
+        { _id: ObjectId(req.user.id) },
+        { $set: 
+          {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            addressLine1: req.body.addressLine1,
+            addressLine2: req.body.addressLine2,
+            zipCode: req.body.zipCode
+          }
+        }
       );
+
+      //update winning
+      if(req.query.winingID){
+
+      collection = dbClient.db(dbname).collection("rafflechecks");
+      // perform actions on the collection object
+      //const userid = "61a560c35c11ae6e70e92170";
+      console.log(req);
+      const updatedWining = await collection.updateOne(
+        { _id: ObjectId(req.query.winingID) },
+        { $set: 
+          {
+            name: `${req.body.lastName}, ${req.body.firstName}`,
+            address:`${req.body.addressLine1} \n ${req.body.addressLine2}`.trim(),
+            zipCode: req.body.zipCode
+          }
+        }
+      );
+
+      }
+
+
+
+
       res.status(200).send(updatedUser);
     } catch (er) {
       console.error(er);

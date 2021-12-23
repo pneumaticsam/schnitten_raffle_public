@@ -56,11 +56,23 @@ console.log(f);
             .subscribe(
                 data => {
                   console.log(data)
+                  var options = {
+                    autoClose: false,
+                    keepAfterRouteChange: true
+                  }
+
+                  this.alertService.info(`Welcome, you can now check your raffle codes!`, options);
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                  console.log(error.error)
+                  console.log('error here');
+                  
+                  console.log(error)
+                  if(error.status == 0){
+                    this.alertService.error(`Server may be down`);
+                  }else{
                   this.alertService.error(error.error);
+                  }
                   this.loading = false; 
                 });
     }

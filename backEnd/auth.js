@@ -49,7 +49,7 @@ const login = function login(req, res) {
       if (!bcrypt.compareSync(req.body.password, user.password))
       {
         console.log("Password mismatch")
-        return res.sendStatus(401).send('Phonenumber or password incorrect');
+        return res.status(401).send('Phonenumber or password incorrect');
       }
 
       const jwtUser = { name: user.phone, id: user._id };

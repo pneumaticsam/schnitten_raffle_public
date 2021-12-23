@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs';
 import { Login } from 'src/app/models/login';
 import { UserService } from 'src/app/services';
 import { AlertService } from '../alert';
+import { PopUpComponent } from '../pop-up/pop-up.component';
 
 @Component({
   selector: 'app-registration',
@@ -17,6 +19,7 @@ export class RegistrationComponent implements OnInit {
   submitted = false;
   returnUrl: string ="/";
   constructor(   
+    private dialogRef:MatDialog,
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
@@ -27,6 +30,10 @@ export class RegistrationComponent implements OnInit {
   model=new Login();
 
   
+  openDialog(){
+    this.dialogRef.open(PopUpComponent);
+  }
+
   onSubmit(f: NgForm) {
 
     console.log(`Registation submission... with data ${f.controls}`)
@@ -37,6 +44,8 @@ export class RegistrationComponent implements OnInit {
 
         // stop here if form is invalid
         if (f.invalid) {
+          console.log(`form not valid`)
+          console.log(f.errors)
             return;
         }
 console.log(f);
@@ -56,8 +65,8 @@ console.log(f);
                   this.router.navigate([this.returnUrl], {queryParams:{id:data.id}});
                 },
                 error => {
-                  console.log(error)
-                    this.alertService.error(error);
+                  console.log(error.error)
+                    this.alertService.error(error.error);
                     this.loading = false;
                 });
 
@@ -65,3 +74,8 @@ console.log(f);
     }
 
 }
+
+// 424500
+// 297213
+
+

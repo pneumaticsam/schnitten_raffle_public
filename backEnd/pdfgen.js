@@ -40,7 +40,7 @@ module.exports = async function genPdf(code, serial, force) {
   //   //return res;
   // })
   // .catch((error) => {
-  //   console.error(error);
+  //   console.error(error.error);
   //   //return null;
   // });
   return file;

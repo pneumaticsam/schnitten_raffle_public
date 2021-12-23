@@ -17,6 +17,18 @@ export class UserService {
       return this.http.post<RegistrationOtp>(`${config.apiUrl}/users/register`, user);
   }
 
+  profileUpdate(profile:any) {
+    
+    const jwt = JSON.parse(localStorage.getItem('currentUser')||"")['accessToken']
+
+    const headers= { headers: {
+      'Content-Type': 'application/json',
+      'Authorization':`bearer ${jwt}`
+    }};
+
+      return this.http.post<any>(`${config.apiUrl}/users/updateprofile`, profile, headers);
+  }
+
   verify(otp:RegistrationOtp) {
       return this.http.post<any>(`${config.apiUrl}/users/verify`, otp);
   }
