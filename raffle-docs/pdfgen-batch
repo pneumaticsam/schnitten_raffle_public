@@ -1,0 +1,63 @@
+#A
+sleep 5; curl -o pdf-files/A0.pdf http://localhost:4200/api/raffle/rafflecode?rCode=D94SU9IJRSMD
+sleep 5; curl -o pdf-files/A1.pdf http://localhost:4200/api/raffle/rafflecode?rCode=ZJITDYQZO4EQ
+sleep 5; curl -o pdf-files/A2.pdf http://localhost:4200/api/raffle/rafflecode?rCode=3NY5FDGFJHEW
+sleep 5; curl -o pdf-files/A3.pdf http://localhost:4200/api/raffle/rafflecode?rCode=ZNA02UJ9K89Z
+sleep 5; curl -o pdf-files/A4.pdf http://localhost:4200/api/raffle/rafflecode?rCode=LNGE6TZ2JBL9
+sleep 5; curl -o pdf-files/A5.pdf http://localhost:4200/api/raffle/rafflecode?rCode=RHJNMO8OYLSQ
+sleep 5; curl -o pdf-files/A6.pdf http://localhost:4200/api/raffle/rafflecode?rCode=GR7P6YVTV6NO
+sleep 5; curl -o pdf-files/A7.pdf http://localhost:4200/api/raffle/rafflecode?rCode=GHRA39NGWC4R
+sleep 5; curl -o pdf-files/A8.pdf http://localhost:4200/api/raffle/rafflecode?rCode=JRDT3SGEXWR6
+sleep 5; curl -o pdf-files/A9.pdf http://localhost:4200/api/raffle/rafflecode?rCode=YJG9E5P0RFDB
+
+#B
+sleep 5; curl -o pdf-files/B0.pdf http://localhost:4200/api/raffle/rafflecode?rCode=I4Q8EMPYIPRR
+sleep 5; curl -o pdf-files/B1.pdf http://localhost:4200/api/raffle/rafflecode?rCode=AF077758JKJM
+sleep 5; curl -o pdf-files/B2.pdf http://localhost:4200/api/raffle/rafflecode?rCode=BJVN4XBBU5PK
+sleep 5; curl -o pdf-files/B3.pdf http://localhost:4200/api/raffle/rafflecode?rCode=IACF3OY7IZJI
+sleep 5; curl -o pdf-files/B4.pdf http://localhost:4200/api/raffle/rafflecode?rCode=0LLRC3KJ9H3J
+sleep 5; curl -o pdf-files/B5.pdf http://localhost:4200/api/raffle/rafflecode?rCode=GUIQHS54V38M
+sleep 5; curl -o pdf-files/B6.pdf http://localhost:4200/api/raffle/rafflecode?rCode=KBA4WRXHK623
+sleep 5; curl -o pdf-files/B7.pdf http://localhost:4200/api/raffle/rafflecode?rCode=D3NSZTDTPLTS
+sleep 5; curl -o pdf-files/B8.pdf http://localhost:4200/api/raffle/rafflecode?rCode=FB4N1BH1ITH6
+sleep 5; curl -o pdf-files/B9.pdf http://localhost:4200/api/raffle/rafflecode?rCode=85IBSD2VAB32
+
+#C
+
+sleep 5; curl -o pdf-files/C0.pdf http://localhost:4200/api/raffle/rafflecode?rCode=TXMNXVP1C5L6
+sleep 5; curl -o pdf-files/C1.pdf http://localhost:4200/api/raffle/rafflecode?rCode=HPQXZAHR9HL1
+sleep 5; curl -o pdf-files/C2.pdf http://localhost:4200/api/raffle/rafflecode?rCode=5CNZDPOPYL4K
+sleep 5; curl -o pdf-files/C3.pdf http://localhost:4200/api/raffle/rafflecode?rCode=3DSL0VIHAX25
+sleep 5; curl -o pdf-files/C4.pdf http://localhost:4200/api/raffle/rafflecode?rCode=Z6COF08S3XH7
+sleep 5; curl -o pdf-files/C5.pdf http://localhost:4200/api/raffle/rafflecode?rCode=BIYDFX1MEXL5
+sleep 5; curl -o pdf-files/C6.pdf http://localhost:4200/api/raffle/rafflecode?rCode=74L87ZU2DTFM
+sleep 5; curl -o pdf-files/C7.pdf http://localhost:4200/api/raffle/rafflecode?rCode=HUNLOH5E8IEF
+sleep 5; curl -o pdf-files/C8.pdf http://localhost:4200/api/raffle/rafflecode?rCode=97GZICU2ZYH0
+sleep 5; curl -o pdf-files/C9.pdf http://localhost:4200/api/raffle/rafflecode?rCode=SH01WOLBQY3H
+
+#D
+
+sleep 5; curl -o pdf-files/D0.pdf http://localhost:4200/api/raffle/rafflecode?rCode=FEW1KBVLSVOU
+sleep 5; curl -o pdf-files/D1.pdf http://localhost:4200/api/raffle/rafflecode?rCode=C9MXJ1K50Y3Y
+sleep 5; curl -o pdf-files/D2.pdf http://localhost:4200/api/raffle/rafflecode?rCode=NB14ZR3MVM4L
+sleep 5; curl -o pdf-files/D3.pdf http://localhost:4200/api/raffle/rafflecode?rCode=1HZHUFSPVYEZ
+sleep 5; curl -o pdf-files/D4.pdf http://localhost:4200/api/raffle/rafflecode?rCode=ZX4ALJ6STFW3
+sleep 5; curl -o pdf-files/D5.pdf http://localhost:4200/api/raffle/rafflecode?rCode=XAK9ZB91ANO3
+sleep 5; curl -o pdf-files/D6.pdf http://localhost:4200/api/raffle/rafflecode?rCode=XBO9CKBW7Y8Y
+sleep 5; curl -o pdf-files/D7.pdf http://localhost:4200/api/raffle/rafflecode?rCode=C48L1DFFZJ49
+sleep 5; curl -o pdf-files/D8.pdf http://localhost:4200/api/raffle/rafflecode?rCode=PAVHCOG5IYTY
+sleep 5; curl -o pdf-files/D9.pdf http://localhost:4200/api/raffle/rafflecode?rCode=YOJQA1Z9FEYC
+
+#0
+
+sleep 5; curl -o pdf-files/00.pdf http://localhost:4200/api/raffle/rafflecode?rCode=5E9CPMWY6DB9
+sleep 5; curl -o pdf-files/01.pdf http://localhost:4200/api/raffle/rafflecode?rCode=ORBVL5REKX7Q
+sleep 5; curl -o pdf-files/02.pdf http://localhost:4200/api/raffle/rafflecode?rCode=VUS187DSUGM0
+sleep 5; curl -o pdf-files/03.pdf http://localhost:4200/api/raffle/rafflecode?rCode=51AEVJJN453J
+sleep 5; curl -o pdf-files/04.pdf http://localhost:4200/api/raffle/rafflecode?rCode=0DWMV55B4DJ6
+sleep 5; curl -o pdf-files/05.pdf http://localhost:4200/api/raffle/rafflecode?rCode=VZ18A4DFAL0G
+sleep 5; curl -o pdf-files/06.pdf http://localhost:4200/api/raffle/rafflecode?rCode=GV7ZGQKXOOXQ
+sleep 5; curl -o pdf-files/07.pdf http://localhost:4200/api/raffle/rafflecode?rCode=HP7WOQ8YVVUL
+sleep 5; curl -o pdf-files/08.pdf http://localhost:4200/api/raffle/rafflecode?rCode=YGT1J51AJRDR
+sleep 5; curl -o pdf-files/09.pdf http://localhost:4200/api/raffle/rafflecode?rCode=H0E7R6INV8ON
+

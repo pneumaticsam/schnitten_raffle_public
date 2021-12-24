@@ -1,0 +1,11 @@
+The solution is containerized with Docker. 
+With the front-end listening on port 3000 (http://localhost:3000) and the back-end on port 4200. 
+it uses mongodb for data persistence and mongo-express is configured to provide
+a window into the  mongodb. (If you desire to expose the mongodb, you can release the 
+port in the docker-compose.yml file). The mongo-express admin console runs on port 8081 (http://localhost:8081)
+
+The raffle codes csv is located in .\raffle-docs\raffle-codes.csv;
+while the generated sample pdf files are located in the folder
+./raffle-docs/pdf-files. Ten samples were generated for each category and
+they are named according to their category eg. (A0.pdf - A9.pdf). The non-
+winning category is labeled '0' (00.pdf - 09.pdf)
