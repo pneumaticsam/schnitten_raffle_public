@@ -28,9 +28,9 @@ app.post("/api/login", (req, res) => {
 
 //start the scheduler
 
-cron.schedule('0 7 * * *', () => {
-  // cron.schedule('57 3 * * *', () => {
-  console.log('running the daily repport by 7am everyday');
+console.log(`CRON SCHEDULE:[${process.env.CRON_SCHEDULE}]`);
+cron.schedule(`${process.env.CRON_SCHEDULE}`, () => {
+  console.log('running the daily report by 7am everyday');
   dailyReportFn()
 });
 
