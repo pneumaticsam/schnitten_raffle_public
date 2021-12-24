@@ -4,6 +4,7 @@
   "description": "Test Raffle promotion code",
   
   "scripts": {
+    "start": "docker-compose up -d",
     "devStart": "docker-compose up -d mongo-express",
     "devStart:clean": "docker-compose down -v",
     "devStop": "docker-compose down"

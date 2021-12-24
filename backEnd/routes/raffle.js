@@ -39,6 +39,7 @@ router.post("/check", authenticate, async (req, res) => {
     if(checkdCode){
       console.log(`the code[${rCode}] had been checked earlier`);
       if(checkdCode.customer == req.user.id){
+        if(checkdCode.cat){
         const priceDesc=`Congratulations, you have already won with this code!`
         console.log(priceDesc);   
         resp.checkID="";
@@ -46,6 +47,16 @@ router.post("/check", authenticate, async (req, res) => {
 
         console.log(resp);
         return res.status(200).send(resp)  
+        }else{
+          const priceDesc=`You have already check this code before, it didn't win!`
+        console.log(priceDesc);   
+        resp.checkID="";
+        resp.desc=priceDesc
+
+        console.log(resp);
+        return res.status(401).send(resp)  
+        
+        }
     }else{
       resp.desc = `Code [${rCode} has already been ${checkdCode.cat?"claimed":"checked"} by someone else, contact sales if you wish to make a claim]`;
       console.log(resp);
