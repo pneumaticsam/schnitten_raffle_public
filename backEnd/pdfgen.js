@@ -1,54 +1,53 @@
  //Required package
 var pdf = require("pdf-creator-node");
 var fs = require("fs");
-var moment = require("moment");
-const { string } = require("joi");
 const { pathToFileURL } = require("url");
-
-module.exports = async function genPdf(code, serial, force) {
-  file = pathToFileURL(`repo/pdf/${code}.pdf`).toString();
-  console.log(`PDFfile = [${file}]`);
-
-  file=file.substring(7);
-
-  console.log(`PDFfile now = [${file}]`);
+const { SymbologyType, createStream } = require("symbology");
 
 
-  if (!force && fs.existsSync(file)) {
-    console.log(`${file} already exists, exiting...`);
-    return file;
+module.exports = async function genPdf(code, forceOverwrite) {
+  filePath = pathToFileURL(`repo/pdf/${code}.pdf`).toString();
+
+  filePath=filePath.substring(7); 
+
+  console.log(`PDFfile now = [${filePath}]`);
+
+
+  if (!forceOverwrite && fs.existsSync(filePath)) {
+    console.log(`${filePath} already exists, exiting...`);
+    return filePath;
   }
+
+
   // Read HTML Template
   var html = fs.readFileSync("./pdfTemplate.htm", "utf8");
-
-  //"format": "Letter", // allowed units: A3, A4, A5, Legal, Letter, Tabloid "orientation": "portrait", // portrait or landscape
+  
+  var barCodeData;
+  
+  console.log("creating stream");
+    barCodeData = await createStream({
+      symbology: SymbologyType.CODE128,
+      showHumanReadableText: false
+    }, code)
+    console.log("creating stream");
 
   var options = { format: "A5", orientation: "landscape", border: "10mm" };
-  options = { height: "5in", width: "12in", border: "2mm" };
+  options = { height: "5in", width: "10in", border: "2mm" };
 
   var document = {
     html: html,
     data: {
       Code: code,
-      Serial: serial ?? moment().format("ssyyyyHHMMmmhhDD"),
+      base64_Image:barCodeData.data
     },
-    path: file,
+    path: filePath,
   };
 
-  console.log('aBOUT TO CREATE...');
+  console.log('creating pdf...');
 
   var pdfPromise = pdf.create(document, options);
 
-  var thePromises = await Promise.all([pdfPromise]);
+  await Promise.all([pdfPromise]);
 
-  console.log(thePromises);
-  // .then((res) => {
-  //   console.log(res);
-  //   //return res;
-  // })
-  // .catch((error) => {
-  //   console.error(error.error);
-  //   //return null;
-  // });
-  return file;
+  return filePath;
 };

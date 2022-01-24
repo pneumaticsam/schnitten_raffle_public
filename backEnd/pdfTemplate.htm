@@ -3,13 +3,30 @@
     <head>
         <mate charest="utf-8" />
         <title>Schnitten Raffle</title>
+        <style>
+            .center1{
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                padding: 30px 10px 30px 10px;
+            }
+            .center {
+              margin: auto;
+              width: 60%;
+              height: 60%;
+              border: 3px solid hsla(85, 38%, 9%, 0.247);
+              padding: 10px;
+              text-align: center;
+              vertical-align: middle;
+            }
+            </style>
     </head>
-    <body valign="center">
-        <div class="container-fluid" style="text-align: center;">
-            
-        <h1>Schnitten Raffle Code</h1>
-        <p style="font-family:Helvetica Neue, Helvetica, Arial; font-weight:900; font-size:72px;">{{Code}}</p>
-        <p><h3>S/No: {{Serial}}</h3></p>
-          </div>
+    <body >
+        <div class="center1"> 
+        <div class="center">            
+        <h4>Schnitten Raffle Code</h1>
+        <img id='base64image' src='{{base64_Image}}' /> 
+        <h3>{{Code}}</h3>
+          </div> </div>
     </body>
 </html>
