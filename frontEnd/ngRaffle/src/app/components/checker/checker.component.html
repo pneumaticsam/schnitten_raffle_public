@@ -1,14 +1,11 @@
-<form #f="ngForm" (ngSubmit)="onSubmit(f)" >
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <div class="form-group"><label for="raffle-code">Raffle Code</label>
-        <input type="text" required 
-        class="form-control" 
-        id="raffle-code" 
-        name="raffle-code" 
-        [(ngModel)]="rCodeData">
+        <input type="text" required class="form-control" id="raffle-code" name="raffle-code" [(ngModel)]="rCodeData">
     </div>
+    <div class="flexbuttons">
         <button class="btn btn-primary">Check Code</button>
-        <p class=""></p>
-        <p class=""></p>
-        <p class=""><button (click)="logOut()">Logout</button></p>
-        
-    </form>
+
+        <a><button class="btn btn-cancel" (click)="logOut()">Logout</button></a>
+    </div>
+
+</form>

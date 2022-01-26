@@ -1,0 +1,37 @@
+   <mat-toolbar color="primary">
+       <mat-toolbar-row fxLayoutAlign="space-between center">
+           <div fxLayout="row">
+               <button mat-button class="home">
+                   <mat-icon>home</mat-icon>
+                   <span>Austrian Manner Schnitten</span>
+               </button>
+               <div *ngIf="!isSmallDevice">
+                   <button mat-button>Home</button>
+                   <button mat-button>Contact Us</button>
+                   <button mat-button>About Us</button>
+               </div>
+           </div>
+           <div>
+               <button mat-icon-button>
+                   <mat-icon *ngIf="isSmallDevice">more_vert</mat-icon>
+                   <span *ngIf="!isSmallDevice">More</span>
+               </button>
+           </div>
+       </mat-toolbar-row>
+
+       <mat-toolbar-row *ngIf="isSmallDevice" fxLayout="row" fxLayoutAlign="space-between end">
+           <div>
+               <button mat-button>Home</button>
+               <button mat-button>Contact Us</button>
+               <button mat-button>About Us</button>
+           </div>
+       </mat-toolbar-row>
+
+
+
+       <mat-toolbar-row *ngIf="!isSmallDevice" fxLayout="row" fxLayoutAlign="center center" class="bigContainer">
+           <div>
+               <h1 class="huge-text font-effect-fire">Great taste meets great value!</h1>
+           </div>
+       </mat-toolbar-row>
+   </mat-toolbar>

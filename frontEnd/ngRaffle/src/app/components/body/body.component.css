@@ -1,0 +1,48 @@
+.mannerlogo {}
+
+img {
+    height: 300px;
+    width: 300px;
+}
+
+.sideImage {
+    height: 300px;
+    width: auto;
+    padding: 3px;
+}
+
+.textcontainer {
+    padding: 10px;
+}
+
+.appContent {
+    width: 100%;
+}
+
+.appView {
+
+    color: aliceblue;
+    font-weight: bold;
+    position: fixed;
+    align-content: center;
+    padding: 20px;
+    width: 30%;
+    height: 45%;
+    top: 35%;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    background-image: linear-gradient(to right, rgba(31, 7, 3, 0.96), rgba(0, 255, 255, .2)),
+        linear-gradient(to top, rgba(31, 7, 3, 0.96), rgba(0, 255, 255, .2));
+}
+
+
+.alertView {
+
+    position: fixed;
+    padding: 20px;
+    width: 30%;
+    height: 20%;
+    bottom: 67%;
+    z-index: 999;
+}

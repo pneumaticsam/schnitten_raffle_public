@@ -1,84 +1,83 @@
 .flex-container {
-  display: flex;
-  height: 100vh;
-  background-image: linear-gradient(rgba(247, 212, 208,.4), rgba(131, 96, 158,.6)), url("../../../assets/images/sliced-bread.jpg");
-  background-size: cover;
-  background-position: bottom;
+    display: flex;
+    height: 100vh;
+    background-image: linear-gradient(rgba(247, 212, 208, .4), rgba(131, 96, 158, .6)), url("../../../assets/images/sliced-bread.jpg");
+    background-size: cover;
+    background-position: bottom;
 }
 
-.flex-col.main{
-  display: flex;
-  flex-direction: column;
+.flex-col.main {
+    display: flex;
+    flex-direction: column;
 }
 
-.title{
-  padding: 50px 0px 0px 250px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: 56px;
-  letter-spacing: 50px;
-  font-weight: bold;
-  color: rgb(255, 255, 255);
-  flex: 2;
+.title {
+    padding: 50px 0px 0px 250px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 56px;
+    letter-spacing: 50px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    flex: 2;
 }
 
-
-
-.main-content{
-  flex: 1;
-  margin: auto;
+.main-content {
+    flex: 1;
+    margin: auto;
 }
 
-.huge-text{
-  font-family: "Sofia", sans-serif;
-  font-size: 72px;
-  font-weight: bold;
+.huge-text {
+    font-family: "Sofia", sans-serif;
+    font-size: 72px;
+    font-weight: bold;
 }
 
-.footer{
-  flex: auto;
-}
-.flex-col{
-padding: 10px;
-flex: 4 2 300px;
+.footer {
+    flex: auto;
 }
 
-.flex-col.activity-area{
-flex: 1 1 200px;
-
-display: flex;
-flex-direction: column;
-height: 100vh;
-justify-items: flex-end;
+.flex-col {
+    padding: 10px;
+    flex: 4 2 300px;
 }
 
-.raffle-title{
-  flex:0 1 70px;
-  margin: auto;
-  font-size: 32px;
-  font-weight: bold;  
-  color: rgb(45, 91, 131);
-  text-align: center;
-}
-.flex-alertz-box{
-  flex: 1 1 10px;
-  display: flex;
-  align-items: flex-end;
-  margin: auto;
-}
-.flex-activity-box-container{
-  flex: 1 1 400px;
-  background-image: linear-gradient(to top, rgba(120, 112, 111,.94), rgba(0,255,255,.2)),  url("../../../assets/images/sliced-cake.jpg");
-  background-size:cover;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  padding-top: 200px;
-  border-radius: 15%;
+.flex-col.activity-area {
+    flex: 1 1 200px;
 
-
-}
-.flex-activity-box{
-  margin: auto;
-  flex:4
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-items: flex-end;
 }
 
+.raffle-title {
+    flex: 0 1 70px;
+    margin: auto;
+    font-size: 32px;
+    font-weight: bold;
+    color: rgb(45, 91, 131);
+    text-align: center;
+}
+
+.flex-alertz-box {
+    flex: 1 1 10px;
+    display: flex;
+    align-items: flex-end;
+    margin: auto;
+}
+
+.flex-activity-box-container {
+    flex: 1 1 400px;
+    background-image: linear-gradient(to top, rgba(120, 112, 111, .94), rgba(0, 255, 255, .2)), url("../../../assets/images/sliced-cake.jpg");
+    background-size: cover;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 200px;
+    border-radius: 15%;
+}
+
+.flex-activity-box {
+    margin: auto;
+    flex: 4
+}
