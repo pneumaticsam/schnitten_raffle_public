@@ -1,8 +1,8 @@
-<div fxLayout='row' fxLayout.xs="row" class="zero">
+<div fxLayout='row' fxLayout.xs="row" fxLayout.xs="column" class="zero">
 
-    <div fxFlex="70" [fxFlex.md]=50 fxLayout='column'>
+    <div fxFlex="70" [fxFlex.sm]=50 fxLayout='column'>
 
-        <div fxFlex="0 1 auto" fxLayout="row">
+        <div fxFlex="0 1 auto" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column">
             <div fxFlex="0 1 auto" class="mannerlogo">
                 <img src="../../../assets/images/mannertorte_0.png.webp" alt="Manner Logo">
             </div>
@@ -17,9 +17,9 @@
             </div>
         </div>
 
-        <div fxFlex="0 1 auto" fxLayout="row" class="textcontainer">
+        <div fxFlex="0 1 auto" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column">
 
-            <div fxFlex="0 1 auto" fxLayout="column" fxLayoutAlign="center end" class="textcontainer">
+            <div fxFlex="0 1 auto" fxLayout="column" fxLayoutAlign="center end" [fxFlexOrder.sm]=2 [fxFlexOrder.xs]=2 class="textcontainer">
                 <h1>CASALI</h1>
                 <p>
 
@@ -29,12 +29,12 @@
                 </p>
             </div>
 
-            <div fxFlex="0 1 auto" class="mannerlogo">
+            <div fxFlex="0 1 auto" [fxFlexOrder.sm]=1 [fxFlexOrder.xs]=1 class="mannerlogo">
                 <img src="../../../assets/images/manner_tiramisu.png.webp" alt="Manner Logo">
             </div>
         </div>
 
-        <div fxFlex="0 1 auto" fxLayout="row">
+        <div fxFlex="0 1 auto" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column">
             <div fxFlex="0 1 auto" class="mannerlogo">
                 <img src="../../../assets/images/cakey.jpeg" alt="Manner Logo">
             </div>
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <div fxFlex="30" fxLayout='column'>
+    <div fxFlex="30" [fxFlex.sm]=50 fxLayout='column'>
 
         <div class="alertView" fxLayoutAlign="center end">
             <alert></alert>
@@ -62,7 +62,7 @@
                 <router-outlet></router-outlet>
             </div>
         </div>
-        <img class=" sideImage" src="../../../assets/images/cake-cut.jpeg">
+        <img class="sideImage" src="../../../assets/images/cake-cut.jpeg">
         <img class="sideImage" src="../../../assets/images/chocolate-cake.jpeg">
         <img class="sideImage" src="../../../assets/images/sliced-bread.jpg">
         <img class="sideImage" src="../../../assets/images/sliced-cake.jpg">

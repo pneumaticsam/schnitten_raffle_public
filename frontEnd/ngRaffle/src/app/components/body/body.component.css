@@ -1,4 +1,6 @@
-.mannerlogo {}
+.mannerlogo {
+    margin: auto;
+}
 
 img {
     height: 300px;
@@ -36,7 +38,6 @@ img {
         linear-gradient(to top, rgba(31, 7, 3, 0.96), rgba(0, 255, 255, .2));
 }
 
-
 .alertView {
 
     position: fixed;
@@ -45,4 +46,46 @@ img {
     height: 20%;
     bottom: 67%;
     z-index: 999;
+}
+
+@media only screen and (max-width: 959px) {
+    [class="appView"] {
+        width: 50%;
+    }
+
+    [class="alertView"] {
+        width: 50%;
+    }
+}
+
+
+@media only screen and (max-width: 599px) {
+    [class="appView"] {
+        width: 100%;
+    }
+
+    [class="alertView"] {
+        width: 100%;
+    }
+}
+
+
+
+
+@media only screen and (max-width: 889px) {
+    .brandContainer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mannerlogo {
+        -ms-flex-order: 1;
+        order: 1;
+    }
+
+    .textcontainer {
+        -ms-flex-order: 2;
+        order: 2;
+    }
+
 }
