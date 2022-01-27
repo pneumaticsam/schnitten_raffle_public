@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { QuaggaJSResultObject } from '@ericblade/quagga2';
+import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner';
+import { defer } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { RaffleCheckData, RaffleCheckResponse } from 'src/app/models/raffleCheckData';
 import { AuthenticationService, RaffleService } from 'src/app/services';
@@ -11,7 +14,7 @@ import { AlertService } from '../alert';
   templateUrl: './checker.component.html',
   styleUrls: ['./checker.component.css']
 })
-export class CheckerComponent implements OnInit {
+export class CheckerComponent implements AfterViewInit, OnInit {
 
 
   loading = false;
@@ -86,13 +89,37 @@ export class CheckerComponent implements OnInit {
   }
   public scan = () => {
     console.log("initiating scan ...")
-    this.enableScanner = !this.enableScanner;
+    this.enableScanner = true;
+    setTimeout(() => { this.barcodeScanner.start(); }, 500);
   }
   //qrResultString!: String;
   enableScanner: boolean = false;
   public onCodeResult = (resultString: string) => {
     console.log("barcode scan result: " + resultString);
     this.rCodeData = resultString;
+  }
+
+
+  @ViewChild(BarcodeScannerLivestreamComponent)
+  barcodeScanner!: BarcodeScannerLivestreamComponent;
+
+  //barcodeValue!: string | null;
+
+  ngAfterViewInit() {
+    //this.barcodeScanner.start();
+  }
+
+  onValueChanges(result: QuaggaJSResultObject) {
+    console.log(result);
+
+    this.rCodeData = result.codeResult.code ?? "";
+
+    this.barcodeScanner.stop();
+    this.enableScanner = false;
+  }
+
+  onStarted(started: boolean) {
+    console.log("barcode scanner started...");
   }
 
 }

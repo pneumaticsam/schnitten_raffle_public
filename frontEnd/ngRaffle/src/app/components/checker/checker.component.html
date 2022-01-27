@@ -15,6 +15,6 @@
         <a><button class="btn btn-cancel" (click)="logOut()">Logout</button></a>
     </div>
     <div class="scannerport" *ngIf="enableScanner">
-        <zxing-scanner [autofocusEnabled]=true (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+        <barcode-scanner-livestream type="code_128" (valueChanges)="onValueChanges($event)" (started)="(onStarted)"></barcode-scanner-livestream>
     </div>
 </form>

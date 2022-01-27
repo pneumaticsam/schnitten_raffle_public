@@ -27,7 +27,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HeaderComponent } from './components/header/header.component';
 import { BodyComponent } from './components/body/body.component';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { BarcodeScannerLivestreamModule } from "ngx-barcode-scanner";
 
 
 const appRoutes: Routes = [
@@ -63,7 +63,7 @@ const appRoutes: Routes = [
     MatDialogModule,
     FlexLayoutModule,
     MatToolbarModule,
-    ZXingScannerModule
+    BarcodeScannerLivestreamModule
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent]
