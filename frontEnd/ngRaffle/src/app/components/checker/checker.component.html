@@ -1,11 +1,20 @@
 <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <div class="form-group"><label for="raffle-code">Raffle Code</label>
-        <input type="text" required class="form-control" id="raffle-code" name="raffle-code" [(ngModel)]="rCodeData">
+        <div fxLayout>
+            <input type="text" required class="form-control" id="raffle-code" name="raffle-code" [(ngModel)]="rCodeData">
+            <span>
+                <button (click)="scan()">
+                    <mat-icon>camera_alt</mat-icon>
+                </button>
+            </span>
+        </div>
     </div>
     <div class="flexbuttons">
         <button class="btn btn-primary">Check Code</button>
 
         <a><button class="btn btn-cancel" (click)="logOut()">Logout</button></a>
     </div>
-
+    <div class="scannerport" *ngIf="enableScanner">
+        <zxing-scanner [autofocusEnabled]=true (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+    </div>
 </form>

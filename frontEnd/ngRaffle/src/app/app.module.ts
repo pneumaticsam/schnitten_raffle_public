@@ -27,6 +27,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HeaderComponent } from './components/header/header.component';
 import { BodyComponent } from './components/body/body.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 
 const appRoutes: Routes = [
@@ -61,7 +62,8 @@ const appRoutes: Routes = [
     AlertModule,
     MatDialogModule,
     FlexLayoutModule,
-    MatToolbarModule
+    MatToolbarModule,
+    ZXingScannerModule
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent]

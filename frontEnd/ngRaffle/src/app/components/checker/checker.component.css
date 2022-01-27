@@ -2,3 +2,9 @@
     display: flex;
     justify-content: space-between;
 }
+
+.scannerport {
+    display: flex;
+    justify-self: center;
+    z-index: 20;
+}
