@@ -3,4 +3,7 @@
     justify-content: space-between;
 }
 
-.scannerport {}
+.scannerport {
+    width: 60%;
+    margin: auto;
+}
