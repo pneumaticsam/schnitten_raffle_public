@@ -10,10 +10,9 @@ function doGet() {
 
 }
 
-
 function doPost(e) {
 
-    schema = {
+    schemaSample = {
         sheetName: "raffleChecks",
         operation: "insert|update|upsert",
         refColumn: "id_column_name",
@@ -21,33 +20,31 @@ function doPost(e) {
         data: {
             1: "5653383, 787833, DH769JNkd789, 67323323",
             2: "5653383, 787833, DH769JNkd789, 67323323",
-            3: "5653383, 787833, DH769JNkd789, 67323323",
+            3: "5653383, 787833, DH769JNkd789, 67323323"
         }
     }
 
+    var lock = LockService.getDocumentLock();
     try {
 
-        let body = e.postData.contents;
-        body = '{ \
-        "sheetName": "raffleChecks", \
-        "operation": "insert|update|upsert", \
-        "refColumn": "id_column_name", \
-        "headers": "obj_id,customer_id,raffle_code,check_time,cat,name,phone, address, zipcode", \
-        "data": { \
-            "1": "5653383, cus_787833, DH769JNkd789, 2021-12-23 12:24:2121, A,Sylvester Chukwu,0803851334,25b Dopemu Street,23401",\
-            "2": "5653384, cus_787833, DH769JNkd783, 2021-12-23 12:31:5151",\
-            "3": "5653387, cus 787833, DH769JNkd750, 2021-12-23 02:40:0404, D,Obiora Obi,08038511402,2b Eloseh Street,23401"\
-        }\
-}';
-        console.log(body);
+        log(e);
+
+        let body = e ? e.postData.contents : null;
+
+        log(body);
 
         const bodyJSON = JSON.parse(body);
 
-        const ss = SpreadsheetApp.getActiveSpreadsheet();
-        let ws = ss.getSheetByName(bodyJSON.sheetName);
-        if (!ws) {
-            ws = ss.insertSheet(bodyJSON.sheetName);
-        }
+        Logger.log("BODY PARSED AS...");
+
+        Logger.log(bodyJSON);
+
+        log("CONSOLE...BODY PARSED AS...");
+        log(bodyJSON);
+
+        lock.waitLock(30000);
+
+        let ws = getWorksheet(bodyJSON.sheetName);
 
         let headers = ws.getLastColumn() > 1 ? ws.getRange(1, 1, 1, ws.getLastColumn()).getValues()[0] : [];
 
@@ -56,7 +53,7 @@ function doPost(e) {
             let headers2insert = bodyJSON.headers.split(',');
             headers2insert.unshift("_id");
             ws.appendRow(headers2insert)
-            Logger.log(headers);
+            log(headers);
         }
 
 
@@ -78,23 +75,51 @@ function doPost(e) {
                 kount++;
             }
         }
+        lock.releaseLock();
+        log(kount + ' rows inserted');
 
-
-        Logger.log(ss.getUrl());
-        Logger.log(kount + ' rows inserted');
-
-        return {
+        return getJSONResponse({
             affected_rows: kount,
             inserted: inserted_ids
-        };
+        });
     } catch (err) {
+        log(err);
         throw err;
     }
 
 }
 
 function getMaxID_(ws) {
-    var lastCell = ws.sort(1).getRange(ws.getLastRow(), 1);
+    if (ws.getLastRow() > 1) {
+        const range = ws.getRange(2, 1, ws.getLastRow() - 1, ws.getLastColumn())
+        if (range.getHeight() > 0) {
+            range.sort(1);
+        }
+    }
+
+    var lastCell = ws.getRange(ws.getLastRow(), 1);
 
     return lastCell.getRow() == 1 ? 0 : lastCell.getValue();
+}
+
+function getJSONResponse(json_or_json_tring) {
+    //return JSON.stringify(json_or_json_tring);
+    return ContentService.createTextOutput()
+        .append(JSON.stringify(json_or_json_tring))
+        .setMimeType(ContentService.MimeType.JSON);
+
+}
+
+function log(info) {
+    let ws = getWorksheet("Logging");
+    ws.appendRow([new Date().getTime(), info]);
+}
+
+function getWorksheet(name) {
+    let ss = SpreadsheetApp.getActiveSpreadsheet();
+    let ws = ss.getSheetByName(name);
+    if (!ws) {
+        ws = ss.insertSheet(name);
+    }
+    return ws;
 }
