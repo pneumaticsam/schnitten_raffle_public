@@ -71,11 +71,17 @@ function doPost(e) {
                 rowData.unshift(++maxID);
 
                 ws.appendRow(rowData);
-                inserted_ids.push(maxID);
+
+                //i[maxID] = rowData[1];
+                inserted_ids.push({
+                    _id: maxID,
+                    id: rowData[1]
+                });
                 kount++;
             }
         }
         lock.releaseLock();
+        log(JSON.stringify(inserted_ids));
         log(kount + ' rows inserted');
 
         return getJSONResponse({
