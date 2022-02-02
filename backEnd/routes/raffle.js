@@ -82,7 +82,8 @@ router.post("/check", authenticate, async (req, res) => {
         const raffleCheck = {
             customer: req.user.id,
             code: rCode,
-            checkTime: moment().format("YYYY-MM-DD hh:mm:ssss"),
+            phone: req.user.name, //contains phone number
+            checkTime: moment().format("YYYY-MM-DD HH:mm:ssss"),
         };
         const checkID = await collection.insertOne({
             ...raffleCheck,
@@ -94,7 +95,7 @@ router.post("/check", authenticate, async (req, res) => {
         const kountQuery = {
             customer: req.user.id,
             checkTime: {
-                $gt: moment().startOf('day').format("YYYY-MM-DD hh:mm:ssss")
+                $gt: moment().startOf('day').format("YYYY-MM-DD HH:mm:ssss")
             },
         };
         const kount = await collection.count(kountQuery);
@@ -108,7 +109,7 @@ router.post("/check", authenticate, async (req, res) => {
         //if checks within bounds then
         if (kount > process.env.MAX_DAILY_CHECK) {
             console.log('velocity limit!')
-            resp.desc = 'Too many check for today, try again tomorrow'
+            resp.desc = 'Too many checks for today, try again tomorrow'
             return res
                 .status(401)
                 .send(resp);
@@ -148,7 +149,8 @@ router.post("/check", authenticate, async (req, res) => {
             dbUser.zipCode && dbUser.zipCode != ''
         ) {
 
-            rfl_update['name'] = `${dbUser.lastName}, ${dbUser.firstName}`.trim();
+            rfl_update['lastname'] = `${dbUser.lastName}`.trim();
+            rfl_update['firstname'] = `${dbUser.firstName}`.trim();
             rfl_update['address'] = `${dbUser.addressLine1} \n ${dbUser.addressLine2}`.trim();
             rfl_update['zipCode'] = dbUser.zipCode.trim();
             rfl_update['lastUpdate'] = new Date().getTime();

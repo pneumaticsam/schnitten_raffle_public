@@ -152,7 +152,7 @@ router.post("/updateprofile", authenticate, (req, res) => {
 
     const {
         error
-    } = userProfileSchema.validate(req.body);
+    } = userProfileSchema.validate(req.body.profile);
 
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -162,32 +162,35 @@ router.post("/updateprofile", authenticate, (req, res) => {
             collection = dbClient.db(dbname).collection("customers");
             // perform actions on the collection object
             //const userid = "61a560c35c11ae6e70e92170";
+            let d = req.body.profile;
             const updatedUser = await collection.updateOne({
                 _id: ObjectId(req.user.id)
             }, {
                 $set: {
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    addressLine1: req.body.addressLine1,
-                    addressLine2: req.body.addressLine2,
-                    zipCode: req.body.zipCode
+                    firstName: d.firstName,
+                    lastName: d.lastName,
+                    addressLine1: d.addressLine1,
+                    addressLine2: d.addressLine2,
+                    zipCode: d.zipCode
                 }
             });
 
             //update winning
-            if (req.query.winingID) {
+            if (req.body.winingID) {
 
                 collection = dbClient.db(dbname).collection("rafflechecks");
                 // perform actions on the collection object
                 //const userid = "61a560c35c11ae6e70e92170";
                 console.log(req);
                 const updatedWining = await collection.updateOne({
-                    _id: ObjectId(req.query.winingID)
+                    _id: ObjectId(req.body.winingID)
                 }, {
                     $set: {
-                        name: `${req.body.lastName}, ${req.body.firstName}`,
-                        address: `${req.body.addressLine1} \n ${req.body.addressLine2}`.trim(),
-                        zipCode: req.body.zipCode
+                        lastname: d.lastName,
+                        firstname: d.firstName,
+                        address: `${d.addressLine1} \n ${d.addressLine2}`.trim(),
+                        zipCode: d.zipCode,
+                        lastUpdate: new Date().getTime()
                     }
                 });
 

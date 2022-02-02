@@ -10,29 +10,31 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getAll() {
-      return this.http.get<any[]>(`${config.apiUrl}/users`);
+    return this.http.get<any[]>(`${config.apiUrl}/users`);
   }
 
-  register(user:any) {
-      return this.http.post<RegistrationOtp>(`${config.apiUrl}/users/register`, user);
+  register(user: any) {
+    return this.http.post<RegistrationOtp>(`${config.apiUrl}/users/register`, user);
   }
 
-  profileUpdate(profile:any) {
-    
-    const jwt = JSON.parse(localStorage.getItem('currentUser')||"")['accessToken']
+  profileUpdate(data: any) {
 
-    const headers= { headers: {
-      'Content-Type': 'application/json',
-      'Authorization':`bearer ${jwt}`
-    }};
+    const jwt = JSON.parse(localStorage.getItem('currentUser') || "")['accessToken']
 
-      return this.http.post<any>(`${config.apiUrl}/users/updateprofile`, profile, headers);
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${jwt}`
+      }
+    };
+
+    return this.http.post<any>(`${config.apiUrl}/users/updateprofile`, data, headers);
   }
 
-  verify(otp:RegistrationOtp) {
-      return this.http.post<any>(`${config.apiUrl}/users/verify`, otp);
+  verify(otp: RegistrationOtp) {
+    return this.http.post<any>(`${config.apiUrl}/users/verify`, otp);
   }
   delete(id: string) {
-      return this.http.delete(`${config.apiUrl}/users/${id}`);
+    return this.http.delete(`${config.apiUrl}/users/${id}`);
   }
 }

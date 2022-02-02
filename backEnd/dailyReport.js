@@ -1,21 +1,28 @@
-const {dailyQuery:query, dailyQuery} = require("./routes/raffle");
+const {
+    dailyQuery: query,
+    dailyQuery
+} = require("./routes/raffle");
 const mailer = require('nodemailer');
 const moment = require('moment');
-const {google} = require('googleapis');
+const {
+    google
+} = require('googleapis');
 const config = require('./mailer-config')
 
 const OAuth2 = google.auth.OAuth2
 const OAuth2_client = new OAuth2(config.clientID, config.clientSecret)
 
-OAuth2_client.setCredentials({refresh_token: config.refreshToken})
+OAuth2_client.setCredentials({
+    refresh_token: config.refreshToken
+})
 
 
-const sendDailyReport = async function sendDailyReportFn(){
+const sendDailyReport = async function sendDailyReportFn() {
     const accessToken = OAuth2_client.getAccessToken()
 
     const transport = mailer.createTransport({
-        service:'gmail',
-        auth:{
+        service: 'gmail',
+        auth: {
             type: 'OAuth2',
             user: config.user,
             clientId: config.clientID,
@@ -26,77 +33,86 @@ const sendDailyReport = async function sendDailyReportFn(){
     })
 
 
-   const {html,csv} = await getReport();
-   console.log(`Html is ${html} and ${csv}`);
+    const {
+        html,
+        csv
+    } = await getReport();
+    console.log(`Html is ${html} and ${csv}`);
 
-   if(!html || html.length==0){
-       return
-   }
-
-    const subject = `Schnitten Daily Report ${moment().format('ddd, MMM DD, yyyy')}`
-    const mail_options={
-        from:config.user, 
-        to: config.recipient,
-        subject:subject,
-        html:html,
-        attachments: [{ filename: `${subject}.csv`, content: csv }]
+    if (!html || html.length == 0) {
+        return
     }
 
-    transport.sendMail(mail_options, function(error, result){
-        if(error){
+    const subject = `Schnitten Daily Report ${moment().format('ddd, MMM DD, yyyy')}`
+    const mail_options = {
+        from: config.user,
+        to: config.recipient,
+        subject: subject,
+        html: html,
+        attachments: [{
+            filename: `${subject}.csv`,
+            content: csv
+        }]
+    }
+
+    transport.sendMail(mail_options, function(error, result) {
+        if (error) {
             console.log('Error', error);
-        }else{
+        } else {
             console.log('Success', result);
         }
         transport.close()
     })
 
 
-    
-    
+
+
 
 }
 
 
-async function getReport()  {
-  
+async function getReport() {
+
     results = await query();
-  
-    if(!results || results.length==0){
+
+    if (!results || results.length == 0) {
         console.log('Nothing to report...');
-        return {html:'',csv:''}
+        return {
+            html: '',
+            csv: ''
+        }
     }
-    
-    var cat='';
+
+    var cat = '';
     var count = 0;
-    var sb=''
-    var sbCsv=''
+    var sb = ''
+    var sbCsv = ''
     results.forEach(e => {
         console.log(e);
-        if(cat!==e.cat){
+        if (cat !== e.cat) {
             //add header Row
-            sb+=`<div><h1>CATEGORY ${e.cat.toUpperCase()}</h1></div>`
+            sb += `<div><h1>CATEGORY ${e.cat.toUpperCase()}</h1></div>`
 
             //then set cat
-            cat=e.cat;
-            count=0;
+            cat = e.cat;
+            count = 0;
         }
         //add row
 
-        sb+=`<div class="row">`
+        sb += `<div class="row">`
 
-        sb+=`<div class="sn" >${++count}</div>`
-        sb+=`<div class="code" >${e.code}</div>`
-        sb+=`<div class="name" >${e.name}</div>`
-        sb+=`<div class="address" >${e.address}</div>`
-        sb+=`<div class="zipcode" >${e.zipCode}</div>`
-        sb+=`<div class="time" >${e.checkTime}</div>`
+        sb += `<div class="sn" >${++count}</div>`
+        sb += `<div class="code" >${e.code}</div>`
+        sb += `<div class="name" >${e.lastname}, ${e.firstname}</div>`
+        sb += `<div class="address" >${e.address}</div>`
+        sb += `<div class="zipcode" >${e.zipCode}</div>`
+        sb += `<div class="time" >${e.checkTime}</div>`
 
-        sb+=`</div>`
+        sb += `</div>`
 
-        sbCsv+=`"${e.code}","${e.cat}","${e.name.replace('\"',"\'")}","${e.address.replace('\"',"\'")}","${e.zipCode}","${e.checkTime}"\n`
+        sbCsv += `"${e.code}","${e.cat}","${e.lastname.replace('\"',"\'")} ${e.firstname.replace('\"',"\'")}","${e.address.replace('\"',"\'")}","${e.zipCode}","${e.checkTime}"\n`
 
-    }); 
+    });
 
     console.log(sb);
     console.log(sbCsv);
@@ -148,7 +164,10 @@ async function getReport()  {
       </style>
     </head>
     <body>   ${sb}</body></html>`;
-    return {html:htmlformated, csv:sbCsv}
+    return {
+        html: htmlformated,
+        csv: sbCsv
+    }
 }
 
 

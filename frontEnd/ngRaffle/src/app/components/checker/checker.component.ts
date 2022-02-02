@@ -62,13 +62,15 @@ export class CheckerComponent implements AfterViewInit, OnInit {
           this.alertService.info(data.desc);
           if (!data.checkID || data.checkID == "") {
             console.log('profile already captured... skipping profile capture');
-            location.href = location.href
-            //this.router.navigate([this.returnUrl]);
+            //location.href = location.href
+
+            this.router.navigate(["/"]);
 
           } else {
             this.returnUrl = "/profile";
             this.router.navigate([this.returnUrl], { queryParams: { winingID: data.checkID } });
           }
+          f.controls['raffle-code'].reset();
         },
         error => {
           console.log('FAILURE')
@@ -76,6 +78,7 @@ export class CheckerComponent implements AfterViewInit, OnInit {
           console.log(error.error)
           this.alertService.error(error.error.desc);
           this.loading = false;
+          f.controls['raffle-code'].reset();
         });
 
     console.log('done submission!');

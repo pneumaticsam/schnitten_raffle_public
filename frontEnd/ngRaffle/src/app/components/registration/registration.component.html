@@ -14,9 +14,9 @@
     <div class="form-group">
         <label for="confirmPassword">Confirm Password</label>
         <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="model.confirmPassword" #confirmPassword="ngModel" [ngClass]="{ 'is-invalid': f.submitted && confirmPassword.invalid }" required />
-        <div *ngIf="f.submitted && confirmPassword.invalid" class="invalid-feedback">
-            <div *ngIf="confirmPassword.errors!.required">Confirm Password is required</div>
-            <div *ngIf="confirmPassword.errors!.mustMatch">Passwords must match</div>
+        <div class="invalid-feedback" *ngIf="f.submitted && confirmPassword.invalid" class="invalid-feedback">
+            <div class="invalid-feedback" *ngIf="confirmPassword.errors!.required">Confirm Password is required</div>
+            <div class="invalid-feedback" *ngIf="confirmPassword.errors!.mustMatch">Passwords must match</div>
         </div>
     </div>
 
