@@ -77,19 +77,6 @@ router.post("/check", authenticate, async (req, res) => {
             }
         }
 
-
-        //log check    
-        const raffleCheck = {
-            customer: req.user.id,
-            code: rCode,
-            phone: req.user.name, //contains phone number
-            checkTime: moment().format("YYYY-MM-DD HH:mm:ssss"),
-        };
-        const checkID = await collection.insertOne({
-            ...raffleCheck,
-            lastUpdate: new Date().getTime()
-        });
-
         //count checks
 
         const kountQuery = {
@@ -114,6 +101,21 @@ router.post("/check", authenticate, async (req, res) => {
                 .status(401)
                 .send(resp);
         }
+
+
+        //log check    
+        const raffleCheck = {
+            customer: req.user.id,
+            code: rCode,
+            phone: req.user.name, //contains phone number
+            checkTime: moment().format("YYYY-MM-DD HH:mm:ssss"),
+        };
+        const checkID = await collection.insertOne({
+            ...raffleCheck,
+            lastUpdate: new Date().getTime()
+        });
+
+
 
         //do check
         const hit = await dbClient.db(dbname).collection("rafflecodes").findOne({
@@ -151,11 +153,9 @@ router.post("/check", authenticate, async (req, res) => {
 
             rfl_update['lastname'] = `${dbUser.lastName}`.trim();
             rfl_update['firstname'] = `${dbUser.firstName}`.trim();
-            rfl_update['address'] = `${dbUser.addressLine1} \n ${dbUser.addressLine2}`.trim();
+            rfl_update['address'] = `${dbUser.addressLine1} ${dbUser.addressLine2}`.trim();
             rfl_update['zipCode'] = dbUser.zipCode.trim();
             rfl_update['lastUpdate'] = new Date().getTime();
-
-
         }
 
         //update rafflechecks collection

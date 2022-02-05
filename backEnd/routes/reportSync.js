@@ -1,6 +1,5 @@
 const {
-    Router,
-    json
+    Router
 } = require("express");
 const dbClient = require("../db");
 
@@ -17,6 +16,22 @@ const dbname = "raffle-db"
 
 router.post("/sync", async (req, res) => {
     //validation
+
+    try {
+        syncReport();
+
+        res.status(201).send("done");
+    } catch (er) {
+        console.error(er);
+        res.status(500).send(er.message);
+    } finally {
+        //await dbClient.close();
+    }
+
+});
+
+const syncReport = function doSync() {
+
 
     dbClient.connect(async (err) => {
         if (err) return console.log(`Could not connect to db ${err}`);
@@ -36,8 +51,8 @@ router.post("/sync", async (req, res) => {
 
             if (darray.length == 0) {
 
-                res.status(200).send("zero items");
-                return;
+                //res.status(200).send("zero items");
+                return 0;
             }
 
             var sb = "";
@@ -65,33 +80,18 @@ router.post("/sync", async (req, res) => {
             //var url = "https://script.google.com/macros/s/AKfycbwvaoW-65k0g9TvZHnXTYb-flvkxHiWP9Jxo-jhBEe_SVyXYGjYzq9mQ2Aamng4UEG4/exec";
             doPost(sb);
 
-            res.status(201).send("done");
+            console.log("done");
+            return darray.length;
         } catch (er) {
             console.error(er);
-            res.status(500).send(er.message);
+            // res.status(500).send(er.message);
         } finally {
             //await dbClient.close();
         }
+        return 0;
     });
-});
 
 
-// Example POST method implementation:
-async function postData(url = '', data = {}) {
-    // Default options are marked with *
-    const response = await fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'no-cors', // no-cors, *cors, same-origin
-        //cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        //credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        redirect: 'follow', // manual, *follow, error
-        //referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
 }
 
 function doPost(data) {
@@ -158,5 +158,6 @@ function doPost(data) {
 
 //============Reporting===============================
 module.exports = {
-    router
+    router,
+    syncReport
 };

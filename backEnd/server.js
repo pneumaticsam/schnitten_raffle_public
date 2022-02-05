@@ -14,12 +14,19 @@ const {
 } = require("./auth");
 const cron = require('node-cron');
 const router = require("./routes/auth");
-const dailyReportFn = require('./dailyReport')
+const dailyReportFn = require('./dailyReport');
 
+const {
+    syncReport: syncReportFn
+} = require('./routes/reportSync');
 
 const {
     router: sync_router
 } = require("./routes/reportSync");
+
+const {
+    router: test_router
+} = require("./uat/integration_test");
 
 
 app = express();
@@ -32,6 +39,7 @@ app.use(cors());
 app.use("/api/raffle", raffle_router);
 app.use("/api/report", sync_router);
 app.use("/api/users", auth_router);
+app.use("/api/tests", test_router);
 
 app.post("/api/login", (req, res) => {
     return login(req, res);
@@ -42,7 +50,18 @@ app.post("/api/login", (req, res) => {
 console.log(`CRON SCHEDULE:[${process.env.CRON_SCHEDULE}]`);
 cron.schedule(`${process.env.CRON_SCHEDULE}`, () => {
     console.log('running the daily report by 7am everyday');
-    dailyReportFn()
+    dailyReportFn();
+});
+
+console.log(`Sync CRON SCHEDULE`);
+cron.schedule('* * * * *', () => {
+    try {
+        console.log('running the sync job every 5 mins');
+        let kount = syncReportFn();
+        console.log(`${kount} items synced!`);
+    } catch (er) {
+        console.log(er);
+    }
 });
 
 const port = process.env.PORT || 3000;
