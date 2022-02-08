@@ -23,7 +23,7 @@ const verifySchema = Joi.object({
 const userProfileSchema = Joi.object({
     firstName: Joi.string().min(3).required(),
     lastName: Joi.string().min(3).required(),
-    addressLine1: Joi.string().min(10).required(),
+    addressLine1: Joi.string().min(3).required(),
     addressLine2: Joi.string(),
     zipCode: Joi.string().required().min(4),
 });
@@ -181,14 +181,14 @@ router.post("/updateprofile", authenticate, (req, res) => {
                 collection = dbClient.db(dbname).collection("rafflechecks");
                 // perform actions on the collection object
                 //const userid = "61a560c35c11ae6e70e92170";
-                console.log(req);
+                //console.log(req);
                 const updatedWining = await collection.updateOne({
                     _id: ObjectId(req.body.winingID)
                 }, {
                     $set: {
                         lastname: d.lastName,
                         firstname: d.firstName,
-                        address: `${d.addressLine1} \n ${d.addressLine2}`.trim(),
+                        address: `${d.addressLine1} ${d.addressLine2}`.trim(),
                         zipCode: d.zipCode,
                         lastUpdate: new Date().getTime()
                     }

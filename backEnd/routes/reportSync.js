@@ -40,10 +40,16 @@ const syncReport = function doSync() {
             var collection = dbClient.db(dbname).collection("rafflechecks");
 
             const darray = await collection.find({
-                syncTime: {
-                    $exists: false
-                }
-            }).toArray();
+                $or: [{
+                        finalSyncTime: {
+                            $exists: false
+                        }
+                    },
+                    {
+                        $where: "this.finalSyncTime <= this.lastUpdate"
+                    }
+                ]
+            }).limit(10).toArray();
 
             let kount = 0;
 
@@ -57,10 +63,14 @@ const syncReport = function doSync() {
 
             var sb = "";
             for (const doc of darray) {
+                let op = "I";
+                if (doc["finalSyncTime"] && doc["lastUpdate"] >= doc["finalSyncTime"]) {
+                    op = "U";
+                }
                 if (doc["lastname"]) {
-                    sb += `\n"${++kount}" : "${doc["_id"]}, ${doc["customer"]??""}, ${doc["code"]??""}, ${doc["checkTime"]??""}, ${doc["cat"]??""}, ${doc["lastname"]??""}, ${doc["firstname"]??""}, ${doc["phone"]??""}, ${(doc["address"]??"").replace(/\n/g, '')}, ${doc["zipCode"]??""}", `;
+                    sb += `\n"${++kount}-${op}" : "${doc["_id"]}, ${doc["customer"]??""}, ${doc["code"]??""}, ${doc["checkTime"]??""}, ${doc["cat"]??""}, ${doc["lastname"]??""}, ${doc["firstname"]??""}, ${doc["phone"]??""}, ${(doc["address"]??"").replace(/\n/g, '')}, ${doc["zipCode"]??""}", `;
                 } else {
-                    sb += `\n"${++kount}" : "${doc["_id"]}, ${doc["customer"]??""}, ${doc["code"]??""}, ${doc["checkTime"]??""}, ${doc["cat"]??""}", `;
+                    sb += `\n"${++kount}-${op}" : "${doc["_id"]}, ${doc["customer"]??""}, ${doc["code"]??""}, ${doc["checkTime"]??""}, ${doc["cat"]??""}", `;
                 }
 
             }
@@ -112,7 +122,8 @@ function doPost(data) {
         response.on('end', async function() {
             console.log("Done getting response!");
             console.log(str);
-            var jsonResp = JSON.parse(str).inserted;
+            var inserted_ids = JSON.parse(str).inserted;
+            var updated_ids = JSON.parse(str).updated;
 
 
             dbClient.connect(async (err) => {
@@ -125,25 +136,48 @@ function doPost(data) {
 
             var collection = dbClient.db(dbname).collection("rafflechecks");
 
-            var _ids = [];
-            for (const key in jsonResp) {
-                if (Object.hasOwnProperty.call(jsonResp, key)) {
+            var i_ids = [];
+            var u_ids = [];
+            for (const key in inserted_ids) {
+                if (Object.hasOwnProperty.call(inserted_ids, key)) {
                     // console.log(`key is ${key} and index is...`);
                     // console.log(jsonResp[key]);
-                    _ids.push(ObjectId(jsonResp[key].id));
+                    i_ids.push(ObjectId(inserted_ids[key].id));
 
                 }
             }
 
-            console.log(_ids);
+            for (const key in updated_ids) {
+                if (Object.hasOwnProperty.call(updated_ids, key)) {
+                    // console.log(`key is ${key} and index is...`);
+                    // console.log(jsonResp[key]);
+                    u_ids.push(ObjectId(updated_ids[key].id));
+
+                }
+            }
+            console.log(i_ids);
+
+            console.log(u_ids);
 
             var queryResp = await collection.updateMany({
                 _id: {
-                    $in: _ids
+                    $in: i_ids
                 }
             }, {
                 $set: {
-                    syncTime: new Date().getTime()
+                    initialSyncTime: new Date().getTime(),
+                    finalSyncTime: new Date().getTime()
+                }
+            });
+            console.log(queryResp);
+
+            queryResp = await collection.updateMany({
+                _id: {
+                    $in: u_ids
+                }
+            }, {
+                $set: {
+                    finalSyncTime: new Date().getTime()
                 }
             });
             console.log(queryResp);

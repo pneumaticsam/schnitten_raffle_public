@@ -18,26 +18,22 @@ function doPost(e) {
         refColumn: "id_column_name",
         headers: "obj_id,customer_id,raffle_code,check_time,cat,name,phone, address, zipcode",
         data: {
-            1: "5653383, 787833, DH769JNkd789, 67323323",
-            2: "5653383, 787833, DH769JNkd789, 67323323",
-            3: "5653383, 787833, DH769JNkd789, 67323323"
+            "1-I": "5653383, 787833, DH769JNkd789, 67323323",
+            "2-U": "5653383, 787833, DH769JNkd789, 67323323",
+            "3-I": "5653383, 787833, DH769JNkd789, 67323323"
         }
     }
 
     var lock = LockService.getDocumentLock();
     try {
 
-        log(e);
+        //log(e);
 
         let body = e ? e.postData.contents : null;
 
-        log(body);
+        //log(body);
 
         const bodyJSON = JSON.parse(body);
-
-        Logger.log("BODY PARSED AS...");
-
-        Logger.log(bodyJSON);
 
         log("CONSOLE...BODY PARSED AS...");
         log(bodyJSON);
@@ -58,35 +54,72 @@ function doPost(e) {
 
 
         let maxID = getMaxID_(ws);
-        let kount = 0;
-        const inserted_ids = [];
+        let ikount = 0,
+            ukount = 0;
+        const inserted_ids = [],
+            updated_ids = [];
 
         for (const index in bodyJSON.data) {
             if (Object.hasOwnProperty.call(bodyJSON.data, index)) {
                 const item = bodyJSON.data[index];
                 let rowData = item.split(',');
 
-                //this could result in duplicate entries for concurrent 
-                //transactions but this is not critical
-                rowData.unshift(++maxID);
+                if (index.split('-')[1] == "I") {
 
-                ws.appendRow(rowData);
+                    rowData.unshift(++maxID);
 
-                //i[maxID] = rowData[1];
-                inserted_ids.push({
-                    _id: maxID,
-                    id: rowData[1]
-                });
-                kount++;
+                    ws.appendRow(rowData);
+
+                    //i[maxID] = rowData[1];
+                    inserted_ids.push({
+                        _id: maxID,
+                        id: rowData[1]
+                    });
+                    ikount++;
+                } else {
+                    try {
+                        let id = rowData[0];
+
+                        // Creates  a text finder for the ID COLUMN.
+                        var textFinder = ws.getRange(2, 2, ws.getLastRow(), 2).createTextFinder(id);
+                        log(`looking for '${id}' in the range: 2,2,${ws.getLastRow()},2`);
+
+                        // Returns the first occurrence of 'dog'.
+                        var hit = textFinder.findNext();
+                        log(`id found at ${hit.getRow()}, ${hit.getColumn()}`);
+                        if (hit) {
+                            //select the relevante row
+                            var rnum = hit.getRow();
+                            var row = ws.getRange(rnum, 2, 1, rowData.length);
+
+                            log(`range is ${row.getA1Notation()}`);
+
+                            row.setValues([rowData]);
+
+                            updated_ids.push({
+                                _id: ws.getRange(rnum, 1).getValue(),
+                                id: id
+                            });
+                            ukount++;
+                        } else {
+                            log(`row with id '${id}' not found for update`);
+                        }
+                    } catch (ex) {
+                        log(ex);
+                    }
+                }
             }
         }
         lock.releaseLock();
         log(JSON.stringify(inserted_ids));
-        log(kount + ' rows inserted');
+        log(ikount + ' rows inserted');
+        log(ukount + ' rows updated');
 
         return getJSONResponse({
-            affected_rows: kount,
-            inserted: inserted_ids
+            inserted_rows: ikount,
+            updated_rows: ukount,
+            inserted: inserted_ids,
+            updated: updated_ids
         });
     } catch (err) {
         log(err);
