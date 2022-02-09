@@ -1,6 +1,3 @@
-const {
-    Router
-} = require("express");
 const dbClient = require("../db");
 
 const {
@@ -9,26 +6,7 @@ const {
 
 const ObjectId = require("mongodb").ObjectId;
 
-const router = Router();
-
 const dbname = "raffle-db"
-
-
-router.post("/sync", async (req, res) => {
-    //validation
-
-    try {
-        syncReport();
-
-        res.status(201).send("done");
-    } catch (er) {
-        console.error(er);
-        res.status(500).send(er.message);
-    } finally {
-        //await dbClient.close();
-    }
-
-});
 
 const syncReport = function doSync() {
 
@@ -49,7 +27,7 @@ const syncReport = function doSync() {
                         $where: "this.finalSyncTime <= this.lastUpdate"
                     }
                 ]
-            }).limit(10).toArray();
+            }).limit(50).toArray();
 
             let kount = 0;
 
@@ -68,16 +46,16 @@ const syncReport = function doSync() {
                     op = "U";
                 }
                 if (doc["lastname"]) {
-                    sb += `\n"${++kount}-${op}" : "${doc["_id"]}, ${doc["customer"]??""}, ${doc["code"]??""}, ${doc["checkTime"]??""}, ${doc["cat"]??""}, ${doc["lastname"]??""}, ${doc["firstname"]??""}, ${doc["phone"]??""}, ${(doc["address"]??"").replace(/\n/g, '')}, ${doc["zipCode"]??""}", `;
+                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${doc["checkTime"]??""},${doc["cat"]??""},${doc["lastname"]??""},${doc["firstname"]??""},${(doc["address"]??"").replace(/\n/g, '')},${doc["zipCode"]??""}",`;
                 } else {
-                    sb += `\n"${++kount}-${op}" : "${doc["_id"]}, ${doc["customer"]??""}, ${doc["code"]??""}, ${doc["checkTime"]??""}, ${doc["cat"]??""}", `;
+                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${doc["checkTime"]??""},${doc["cat"]??""}",`;
                 }
 
             }
 
             sb = `{
         "sheetName": "raffleChecks",
-        "headers": "obj_id,customer_id,raffle_code,check_time,cat,lastname,firstname,phone, address, zipcode",
+        "headers": "obj_id,customer_id,phone,raffle_code,check_time,cat,lastname,firstname, address, zipcode",
         "data": { \n ${sb.substr(0,sb.length-2)}
       }
     }`;
@@ -191,7 +169,4 @@ function doPost(data) {
 }
 
 //============Reporting===============================
-module.exports = {
-    router,
-    syncReport
-};
+module.exports = syncReport;

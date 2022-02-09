@@ -27,7 +27,8 @@ services:
    - GOOGLE_REFRESH_TOKEN=1//04hKV5R_Wr7psCgYIARAAGAQSNgF-L9IrPSDMH7d-sYDIzUwbDOz18tD2bI-zcN4Xoa13c3quBcO4_Fwb9_jLAjVlKF9IVZQssQ
    - MAIlER_USER=donotreply@pneumatictech.com
    - MAIlER_RECIPIENT=obiora.obi@pneumatictech.com,christian.zangl@smart-bits.world,chidi.dire@pneumatictech.com,juergen.spitzbauer@smart-bits.world
-   - CRON_SCHEDULE=0 7 * * *
+   - CRON_DAILY_REPORT_SCHEDULE=0 7 * * *
+   - CRON_REPORT_SYNC_SCHEDULE=* * * * *
 
   volumes:
    - gen-files:/app/repo

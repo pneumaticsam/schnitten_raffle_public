@@ -14,15 +14,11 @@ const {
 } = require("./auth");
 const cron = require('node-cron');
 const router = require("./routes/auth");
-const dailyReportFn = require('./dailyReport');
+const dailyReportFn = require('./reporting/dailyReport');
 
-const {
-    syncReport: syncReportFn
-} = require('./routes/reportSync');
+const syncReportFn = require('./reporting/reportSync');
 
-const {
-    router: sync_router
-} = require("./routes/reportSync");
+//const sync_router = require("./routes/reportSync");
 
 const {
     router: test_router
@@ -37,7 +33,7 @@ app.use(cors());
 
 //routing
 app.use("/api/raffle", raffle_router);
-app.use("/api/report", sync_router);
+//app.use("/api/report", sync_router);
 app.use("/api/users", auth_router);
 app.use("/api/tests", test_router);
 
@@ -46,15 +42,14 @@ app.post("/api/login", (req, res) => {
 });
 
 //start the scheduler
-
-console.log(`CRON SCHEDULE:[${process.env.CRON_SCHEDULE}]`);
-cron.schedule(`${process.env.CRON_SCHEDULE}`, () => {
+console.log(`CRON SCHEDULE:[${process.env.CRON_DAILY_REPORT_SCHEDULE}]`);
+cron.schedule(`${process.env.CRON_DAILY_REPORT_SCHEDULE}`, () => {
     console.log('running the daily report by 7am everyday');
     dailyReportFn();
 });
 
-console.log(`Sync CRON SCHEDULE`);
-cron.schedule('* * * * *', () => {
+console.log(`Sync CRON SCHEDULE:[${process.env.CRON_REPORT_SYNC_SCHEDULE}]`);
+cron.schedule(`${process.env.CRON_REPORT_SYNC_SCHEDULE}`, () => {
     try {
         console.log('running the sync job every 5 mins');
         let kount = syncReportFn();

@@ -67,7 +67,7 @@ router.get("/", async (req, res) => {
 
     let kounter = -1
 
-    while (++kounter < 5) {
+    while (++kounter < 1000) {
 
         try {
             //register user

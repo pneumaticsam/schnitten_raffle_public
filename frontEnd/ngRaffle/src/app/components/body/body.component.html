@@ -58,15 +58,22 @@
             <alert></alert>
         </div>
         <div class="appView">
-            <div class="appContent">
+            <div *ngIf="!showRaffleIntro" class="appContent">
                 <router-outlet></router-outlet>
+            </div>
+            <div *ngIf="showRaffleIntro" class="appContent intro">
+                <p>RAFFLE PROMO!</p>
+                <p>Win Amazing Prizes</p>
+                <p>Everyone stands the chance of wining up to three tasty cut of goodness everyday in this exciting buy and win promo.</p>
+                <p>Just buy any unit of your best cut of tasty goodness and access the raflle code hidden inside. Then enter the code right here to see if you have won! </p>
+                <p><button class="btn btn-primary" (click)="switchView()">CLICK TO CHECK YOUR CODES</button></p>
             </div>
         </div>
         <img class="sideImage" src="../../../assets/images/cake-cut.jpeg">
         <img class="sideImage" src="../../../assets/images/chocolate-cake.jpeg">
         <img class="sideImage" src="../../../assets/images/sliced-bread.jpg">
         <img class="sideImage" src="../../../assets/images/sliced-cake.jpg">
-        <img class="sideImage" src="../../../assets/images/fruity-things.jpeg">
+        <!-- <img class="sideImage" src="../../../assets/images/fruity-things.jpeg">
         <img class="sideImage" src="../../../assets/images/cakey.jpeg">
         <img class="sideImage" src="../../../assets/images/cakecut.jpeg">
         <img class="sideImage" src="../../../assets/images/manner_utz_teaser_2.jpg.webp">
@@ -74,7 +81,7 @@
         <img class="sideImage" src="../../../assets/images/2779_orangen_herzen_beutel_300g_ft_1.png.webp">
         <img class="sideImage" src="../../../assets/images/60427_original-neapolitaner-schnitten_75g_ft_9.png.webp">
         <img class="sideImage" src="../../../assets/images/manner_tiramisu.png.webp">
-        <img class="sideImage" src="../../../assets/images/manner_markenlogo_0.jpg.webp">
+        <img class="sideImage" src="../../../assets/images/manner_markenlogo_0.jpg.webp"> -->
 
     </div>
 

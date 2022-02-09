@@ -1,13 +1,12 @@
 const {
-    dailyQuery: query,
-    dailyQuery
-} = require("./routes/raffle");
+    dailyQuery: query
+} = require("../routes/raffle");
 const mailer = require('nodemailer');
 const moment = require('moment');
 const {
     google
 } = require('googleapis');
-const config = require('./mailer-config')
+const config = require('../mailer-config')
 
 const OAuth2 = google.auth.OAuth2
 const OAuth2_client = new OAuth2(config.clientID, config.clientSecret)
