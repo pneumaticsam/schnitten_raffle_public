@@ -148,9 +148,10 @@ router.get("/", async (req, res) => {
             user.accessToken = JSON.parse(res.body).accessToken;
 
 
-            let doCount = -1;
+            let doCount = -1,
+                docap = Math.ceil(Math.random() * 3);
             //check 3 tickects
-            while (++doCount < 3) {
+            while (++doCount < docap) {
 
 
 

@@ -8,7 +8,9 @@ const ObjectId = require("mongodb").ObjectId;
 
 const dbname = "raffle-db"
 
-const syncReport = function doSync() {
+const fs = require("fs");
+
+const syncReport = function doSync(opt) {
 
 
     dbClient.connect(async (err) => {
@@ -46,9 +48,9 @@ const syncReport = function doSync() {
                     op = "U";
                 }
                 if (doc["lastname"]) {
-                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${doc["checkTime"]??""},${doc["cat"]??""},${doc["lastname"]??""},${doc["firstname"]??""},${(doc["address"]??"").replace(/\n/g, '')},${doc["zipCode"]??""}",`;
+                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${getDate(doc["checkTime"])??""},${doc["cat"]??""},${doc["lastname"]??""},${doc["firstname"]??""},${(doc["address"]??"").replace(/\n/g, '')},${doc["zipCode"]??""}",`;
                 } else {
-                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${doc["checkTime"]??""},${doc["cat"]??""}",`;
+                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${getDate(doc["checkTime"])??""},${doc["cat"]??""}",`;
                 }
 
             }
@@ -56,10 +58,13 @@ const syncReport = function doSync() {
             sb = `{
         "sheetName": "raffleChecks",
         "headers": "obj_id,customer_id,phone,raffle_code,check_time,cat,lastname,firstname, address, zipcode",
-        "data": { \n ${sb.substr(0,sb.length-2)}
+        "data": { \n ${sb.substr(0,sb.length-1)}
       }
     }`;
 
+            if (opt && opt.useSimulatedDates) {
+                setDate();
+            }
             await dbClient.close();
             //send data
             console.log(`about to send data [${sb}]`);
@@ -80,6 +85,41 @@ const syncReport = function doSync() {
     });
 
 
+}
+
+currentSimDate = null;
+
+
+function setDate() {
+    if (currentSimDate) {
+        fs.writeFileSync("./dateOffset.txt", currentSimDate.toISOString());
+        currentSimDate = null;
+    }
+}
+
+function getDate(_oldDate) {
+    if (!opt || !opt.useSimulatedDates) {
+        return new Date(_oldDate.replace(/-/g, '/').split(' ')[0]).toISOString();
+    }
+    if (!currentSimDate) {
+        try {
+            _dateOffset = fs.readFileSync("./dateOffset.txt").toString();
+            dateOffset = new Date(_dateOffset);
+        } catch (err) {
+            //_olddate = _olddate ? _oldDate : new Date().toISOString();
+            console.log(`OLD DATE IS ${_oldDate.replace(/-/g,'/')}`);
+            oldDate = new Date(_oldDate.replace(/-/g, '/').split(' ')[0]);
+            console.log(`OLD DATE IS ${oldDate}`);
+            day = new Date(oldDate.getFullYear(), oldDate.getMonth() - 6, oldDate.getDate() + 1);
+            dateOffset = day;
+            console.log(`DATEOFFSET IS ${day}`);
+            fs.writeFileSync("./dateOffset.txt", dateOffset.toISOString());
+        }
+        currentSimDate = dateOffset;
+    }
+    var addMins = Math.floor(Math.random() * 1170);
+    currentSimDate = new Date(currentSimDate.getTime() + addMins * 6000);
+    return currentSimDate.toISOString();
 }
 
 function doPost(data) {
