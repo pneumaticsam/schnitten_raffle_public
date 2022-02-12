@@ -31,7 +31,7 @@ export class BodyComponent implements OnInit, OnDestroy {
       );
 
     var idleStream = mergedStreams
-      .pipe(bufferTime(10000), filter(function (arr) {
+      .pipe(bufferTime(30000), filter(function (arr) {
         //console.log(arr);
         return arr.length === 0;
       })

@@ -10,7 +10,9 @@ const dbname = "raffle-db"
 
 const fs = require("fs");
 
-const syncReport = function doSync(opt) {
+const syncReport = function doSync(opt = {
+    useSimulatedDates: false
+}) {
 
 
     dbClient.connect(async (err) => {
@@ -48,9 +50,9 @@ const syncReport = function doSync(opt) {
                     op = "U";
                 }
                 if (doc["lastname"]) {
-                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${getDate(doc["checkTime"])??""},${doc["cat"]??""},${doc["lastname"]??""},${doc["firstname"]??""},${(doc["address"]??"").replace(/\n/g, '')},${doc["zipCode"]??""}",`;
+                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${getDate(doc["checkTime"],opt)??""},${doc["cat"]??""},${doc["lastname"]??""},${doc["firstname"]??""},${(doc["address"]??"").replace(/\n/g, '')},${doc["zipCode"]??""}",`;
                 } else {
-                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${getDate(doc["checkTime"])??""},${doc["cat"]??""}",`;
+                    sb += `\n"${++kount}-${op}" : "${doc["_id"]},${doc["customer"]??""},${doc["phone"]??""},${doc["code"]??""},${getDate(doc["checkTime"],opt)??""},${doc["cat"]??""}",`;
                 }
 
             }
@@ -97,8 +99,8 @@ function setDate() {
     }
 }
 
-function getDate(_oldDate) {
-    if (!opt || !opt.useSimulatedDates) {
+function getDate(_oldDate, opt) {
+    if (!opt.useSimulatedDates) {
         return new Date(_oldDate.replace(/-/g, '/').split(' ')[0]).toISOString();
     }
     if (!currentSimDate) {
