@@ -11,7 +11,7 @@ const ObjectId = require("mongodb").ObjectId;
 
 const moment = require("moment");
 const fs = require("fs");
-const pdf = require("../pdfgen");
+const pdf = require("../pdfgen_jsbarcode");
 const {
     time
 } = require("console");
