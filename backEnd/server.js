@@ -52,7 +52,9 @@ console.log(`Sync CRON SCHEDULE:[${process.env.CRON_REPORT_SYNC_SCHEDULE}]`);
 cron.schedule(`${process.env.CRON_REPORT_SYNC_SCHEDULE}`, () => {
     try {
         console.log('running the sync job every 5 mins');
-        let kount = syncReportFn();
+        let kount = syncReportFn({
+            useSimulatedDates: process.env.IS_TEST_ENV
+        });
         console.log(`${kount} items synced!`);
     } catch (er) {
         console.log(er);

@@ -43,8 +43,10 @@ const login = function login(req, res) {
             //const userid = ObjectId("61a5e17d2d76d9824c001d11");
             console.log({
                 phone: req.body.phone
-            })
-            console.log(req.body)
+            });
+
+            console.log(req.body);
+
             const user = await collection.findOne({
                 phone: req.body.phone
             });

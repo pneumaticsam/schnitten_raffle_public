@@ -1,12 +1,18 @@
-const {
-    dailyQuery: query
-} = require("../routes/raffle");
+// const {
+//     dailyQuery: query
+// } = require("../routes/raffle");
+
+const dbClient = require("../db");
+
+const dbname = "raffle-db"
+
 const mailer = require('nodemailer');
 const moment = require('moment');
 const {
     google
 } = require('googleapis');
-const config = require('../mailer-config')
+const config = require('../mailer-config');
+const SMTPTransport = require("nodemailer/lib/smtp-transport");
 
 const OAuth2 = google.auth.OAuth2
 const OAuth2_client = new OAuth2(config.clientID, config.clientSecret)
@@ -14,6 +20,87 @@ const OAuth2_client = new OAuth2(config.clientID, config.clientSecret)
 OAuth2_client.setCredentials({
     refresh_token: config.refreshToken
 })
+
+
+
+const dailyQuery = async function dailyQueryFn() {
+    dbClient.connect(async (err) => {
+        if (err) {
+            console.log(`Could not connect to db ${err}`);
+            resp.desc = "DB error"
+            return res.status(500).send(resp);
+            throw err;
+        }
+    });
+
+    try {
+
+        //get last reported date range
+        const dateRange = {
+            endDate: moment().format('YYYY-MM-DD')
+        };
+        const reportLog = dbClient.db(dbname).collection("reportLog");
+
+        const reports = await reportLog.find({}).sort({
+            endDate: -1
+        }).limit(1).toArray();
+
+        if (reports.length > 0) {
+            dateRange.startDate = moment(reports[0].endDate).format('YYYY-MM-DD');
+            dateRange.endDate = moment().format('YYYY-MM-DD');
+
+            if (dateRange.startDate == dateRange.endDate) {
+                //return null;
+            }
+        }
+
+        const collection = dbClient.db(dbname).collection("rafflechecks");
+
+        //count checks
+
+        const query = {
+            cat: {
+                $exists: true,
+                $in: ['A', 'B', 'C', 'D']
+            },
+            address: {
+                $exists: true
+            }
+        }
+
+        checkTime = {};
+
+        if (dateRange.startDate) {
+            checkTime["$gte"] = moment(dateRange.startDate).format('YYYY-MM-DD');
+        }
+
+        checkTime = {
+            ...checkTime,
+            $lt: moment(dateRange.endDate).format('YYYY-MM-DD')
+        };
+
+        query["checkTime"] = checkTime;
+
+        const results = await collection
+            .find(query)
+            .sort({
+                cat: 1,
+                checkTime: 1
+            })
+            .toArray();
+
+        console.log(query);
+        console.log(`${results.length} items found for daily reporting...`);
+        //console.log(results);
+        return {
+            results,
+            dateRange
+        };
+    } catch (err) {
+        console.error(err);
+    }
+
+}
 
 
 const sendDailyReport = async function sendDailyReportFn() {
@@ -34,15 +121,25 @@ const sendDailyReport = async function sendDailyReportFn() {
 
     const {
         html,
-        csv
+        csv,
+        dateRange,
+        rowCount
     } = await getReport();
-    console.log(`Html is ${html} and ${csv}`);
+    //console.log(`Html is ${html} and ${csv}`);
 
     if (!html || html.length == 0) {
         return
     }
 
-    const subject = `Schnitten Daily Report ${moment().format('ddd, MMM DD, yyyy')}`
+    var subject = `Schnitten Daily Report ${moment(dateRange.startDate).format('ddd, MMM DD, yyyy')}`
+
+    if (dateRange.startDate) {
+        const daysApart = (new Date(dateRange.endDate).getTime() - new Date(dateRange.startDate).getTime()) / (1000 * 60 * 60 * 24);
+        if (daysApart > 1) {
+            subject = `Schnitten Daily Report From ${moment(dateRange.startDate).format('ddd, MMM DD, yyyy')} To ${moment(dateRange.endDate).format('ddd, MMM DD, yyyy')} `
+        }
+    }
+
     const mail_options = {
         from: config.user,
         to: config.recipient,
@@ -54,14 +151,37 @@ const sendDailyReport = async function sendDailyReportFn() {
         }]
     }
 
-    transport.sendMail(mail_options, function(error, result) {
-        if (error) {
-            console.log('Error', error);
-        } else {
-            console.log('Success', result);
-        }
-        transport.close()
-    })
+    try {
+        const info = await transport.sendMail(mail_options);
+        console.log("Message sent: %s", info.messageId);
+
+        //log reportLog
+        const reportLog = dbClient.db(dbname).collection("reportLog");
+
+        var rec = dateRange.startDate ? {
+            startDate: dateRange.startDate
+        } : {};
+
+        await reportLog.insertOne({
+            ...rec,
+            endDate: dateRange.endDate,
+            rowCount: rowCount,
+            logDate: new Date().toISOString()
+        });
+
+        console.log('reportLog inserted...');
+
+    } finally {
+        transport.close();
+    }
+    // , function(error, result) {
+    //     if (error) {
+    //         console.log('Error', error);
+    //     } else {
+    //         console.log('Success', result);
+    //     }
+    //     transport.close()
+    // })
 
 
 
@@ -72,13 +192,17 @@ const sendDailyReport = async function sendDailyReportFn() {
 
 async function getReport() {
 
-    results = await query();
+    const {
+        results,
+        dateRange
+    } = await dailyQuery();
 
     if (!results || results.length == 0) {
         console.log('Nothing to report...');
         return {
             html: '',
-            csv: ''
+            csv: '',
+            dateRange: dateRange
         }
     }
 
@@ -87,7 +211,7 @@ async function getReport() {
     var sb = ''
     var sbCsv = ''
     results.forEach(e => {
-        console.log(e);
+        //console.log(e);
         if (cat !== e.cat) {
             //add header Row
             sb += `<div><h1>CATEGORY ${e.cat.toUpperCase()}</h1></div>`
@@ -113,8 +237,8 @@ async function getReport() {
 
     });
 
-    console.log(sb);
-    console.log(sbCsv);
+    //console.log(sb);
+    //console.log(sbCsv);
     htmlformated = `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -165,7 +289,9 @@ async function getReport() {
     <body>   ${sb}</body></html>`;
     return {
         html: htmlformated,
-        csv: sbCsv
+        csv: sbCsv,
+        dateRange: dateRange,
+        rowCount: results.length
     }
 }
 

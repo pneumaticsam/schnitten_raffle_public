@@ -277,60 +277,6 @@ function makeid(length) {
 
 //=======Admin Stuff=================================
 
-//============Reporting===============================
-
-const dailyQuery = async function dailyQueryFn() {
-    dbClient.connect(async (err) => {
-        if (err) {
-            console.log(`Could not connect to db ${err}`);
-            resp.desc = "DB error"
-            return res.status(500).send(resp);
-        }
-    });
-
-    try {
-
-        const collection = dbClient.db(dbname).collection("rafflechecks");
-
-        //count checks
-
-        const query = {
-            cat: {
-                $exists: true,
-                $in: ['A', 'B', 'C', 'D']
-            },
-            name: {
-                $exists: true
-            },
-            address: {
-                $exists: true
-            },
-            checkTime: {
-                $gte: Date(moment().add(-1, 'days').format('YYYY-MM-DD')),
-                $lt: Date(moment().format('YYYY-MM-DD'))
-            }
-        };
-        const results = await collection
-            .find(query)
-            .sort({
-                checkTime: 1,
-                cat: 1
-            })
-            .toArray();
-
-
-        console.log(`${results.length} items found for daily reporting...`);
-        console.log(results);
-        return results;
-    } catch (err) {
-        console.error(err);
-    }
-
-}
-
-
-//============Reporting===============================
 module.exports = {
-    router,
-    dailyQuery
+    router
 };
